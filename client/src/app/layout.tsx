@@ -36,7 +36,7 @@ const polt_waski = localFont({
 
 
 export const metadata: Metadata = {
-  title: "BITRAFRIC",
+  title: "BITOFRIC",
   description: "Lets travel africa together",
 };
 
@@ -52,7 +52,7 @@ export default function RootLayout({
   ${bowlby.variable} 
   ${dmMono.variable} 
   ${play_flaire.variable}
-  font-outfit antialiased text-softCharcoal bg-[#F3F0E7] overflow-x-hidden`}
+  font-outfit antialiased text-softCharcoal  overflow-x-hidden`}
 >
   {children}
 </body>

@@ -1,7 +1,9 @@
+import { DefaultPage } from "@/components/views/default-page"
 
 
 function Page() {
 
-  return <div>homepage</div> }
+  return <DefaultPage/>
+}
 
 export default Page

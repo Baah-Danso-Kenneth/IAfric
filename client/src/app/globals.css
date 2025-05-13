@@ -7,12 +7,9 @@
   --color-background: var(--background);
   --custom-gradient: linear-gradient(to bottom, #B78BF2 0%, #A8FF8A 100%);
 
-  --terracotta:'#c1440e';
-  --oliveGreen:'#3d6440';
-  --mutedGold:'#dd64200';
-  --softCharcoal:'#1c1c1c';
-  --warmSand:'#faf3e0';
-  --cocoaBrown:'#6eab2a';
+  --electricPurple:'#8338EC';
+  --limeGreen:'#A5DD9B';
+  --sunnyYellow:'#FFE066';
 
   --font-poppins:var(--font-poppins);
   --font-bowlby:var(--font-bowlby);

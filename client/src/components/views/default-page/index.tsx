@@ -5,19 +5,24 @@ import {WhereWeGo} from './WhereWeGo'
 import {HelpYouDecide} from './HelpYouDecide'
 import PeopleTaught from './PeopleTaught'
 import SubScription from '@/components/content/common/SubScription'
+import Footer from '@/components/layout/Footer'
+import React from 'react'
+import KindWords from './KindWords'
 
 
 export function DefaultPage() {
     return (
-      <div>
+      <React.Fragment>
         <Header/>
         <HeroSection/>
         <LittleInfo/>
         <WhereWeGo/>
         <HelpYouDecide/>
         <PeopleTaught/>
+        <KindWords/>
         <SubScription/>
-      </div>
+        <Footer/>
+      </React.Fragment>
     )
   }
   

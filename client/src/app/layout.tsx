@@ -29,9 +29,9 @@ const play_flaire = localFont({
   variable: '--font-play_flaire'
 })
 
-const polt_waski = localFont({
-  src: '../../public/fonts/PoltawskiNowy-MediumItalic.ttf',
-  variable: '--font-polt_waski'
+const delight_mother = localFont({
+  src: '../../public/fonts/Delight Mother.ttf',
+  variable: '--font-delight_mother'
 })
 
 
@@ -48,7 +48,7 @@ export default function RootLayout({
   return (
     <html lang="en">
 <body
-  className={`${poppins.variable} ${polt_waski.variable} ${outfit.variable} 
+  className={`${poppins.variable} ${delight_mother.variable} ${outfit.variable} 
   ${bowlby.variable} 
   ${dmMono.variable} 
   ${play_flaire.variable}

@@ -9,6 +9,7 @@ import Footer from '@/components/layout/Footer'
 import React from 'react'
 import KindWords from './KindWords'
 import ExtraInfo from './ExtraInfo'
+import OurWay from './OurWay'
 
 
 export function DefaultPage() {
@@ -21,6 +22,7 @@ export function DefaultPage() {
         <HelpYouDecide/>
         <PeopleTaught/>
         <ExtraInfo/>
+        <OurWay/>
         <KindWords/>
         <SubScription/>
         <Footer/>

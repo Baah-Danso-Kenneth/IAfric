@@ -120,3 +120,17 @@ export const retro=[
   {name:'guidelines', path:'#'},
 
 ]
+
+
+export const ourStyleData=[
+  {title:'small groups',
+     description:'We really hate shouting across the dinner table, so we cap our group size at 10-12 women per trip. No ifs, ands, or buts about it.',
+    image:'/images/user.png'},
+    {title:'we accept bitcoin',
+      description:'We really hate shouting across the dinner table, so we cap our group size at 10-12 women per trip. No ifs, ands, or buts about it.',
+     image:'/images/lightning.png'},
+     {title:'flexible bookings',
+      description:'We really hate shouting across the dinner table, so we cap our group size at 10-12 women per trip. No ifs, ands, or buts about it.',
+     image:'/images/booking.png'}
+
+]

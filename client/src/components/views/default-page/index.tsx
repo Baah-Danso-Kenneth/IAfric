@@ -8,6 +8,7 @@ import SubScription from '@/components/content/common/SubScription'
 import Footer from '@/components/layout/Footer'
 import React from 'react'
 import KindWords from './KindWords'
+import ExtraInfo from './ExtraInfo'
 
 
 export function DefaultPage() {
@@ -19,6 +20,7 @@ export function DefaultPage() {
         <WhereWeGo/>
         <HelpYouDecide/>
         <PeopleTaught/>
+        <ExtraInfo/>
         <KindWords/>
         <SubScription/>
         <Footer/>

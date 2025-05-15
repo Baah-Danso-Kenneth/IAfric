@@ -66,3 +66,57 @@ export const testimonials = [
       testimony: "I didn’t know any of the women in the group, but it only took a few minutes to feel that I was among friends. Everyone was fun and interesting, and Wild Terrains created an atmosphere that made us all feel like we belonged. I would recommend this trip to anyone, of any age or background who is looking for a new experience."
     }
   ];
+
+
+  export const footerLinks = [
+    {
+      title: 'about',
+      links: [
+        { name: 'how it works', href: '/how_works' },
+        { name: 'our story', href: '/our_story' },
+        { name: 'market place', href: '/market_place' },
+        { name: 'content guidelines', href: '/content_guidelines' }
+      ]
+    },
+    {
+      title: 'pricing',
+      links: [
+        { name: 'Pricing', href: '/pricing' },
+        { name: 'faq', href: '/faq' },
+        { name: 'liscensing terms', href: '/liscense_terms' },
+        { name: '(030)-444-6128', href: '#' }
+      ]
+    },
+    {
+      title: 'socials',
+      links: [
+        { name: 'discord', href: '#' },
+        { name: 'instagram', href: '#' },
+        { name: 'twitter', href: '#' },
+        { name: 'Facebook', href: '#' }
+      ]
+    },
+    {
+      title:'contacts',
+      links: [
+        { name: 'discord', href: '#' },
+        { name: 'instagram', href: '#' },
+
+      ]
+
+    }
+  ];
+
+
+export const retro=[
+  {name:'terms & conditions', path:'#'},
+  {name:'privacy policy', path:'#'},
+  {name:'dos and dont', path:'#'},
+  {name:'accessibility', path:'#'},
+  {name:'brand protection', path:'#'},
+  {name:'faqs', path:'#'},
+  {name:'interest based ', path:'#'},
+  {name:'chequers', path:'#'},
+  {name:'guidelines', path:'#'},
+
+]

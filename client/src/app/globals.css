@@ -199,3 +199,25 @@ input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+
+.hover-underline-animation{
+  @apply relative inline-block;
+}
+
+.hover-underline-animation::after{
+  content:'';
+  @apply absolute h-0.5 bg-black bottom-[-2px] left-0 w-0 transition-all duration-300;
+}
+
+.hover-underline-animation:hover::after{
+  @apply w-full;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.2s ease-out forwards;
+}

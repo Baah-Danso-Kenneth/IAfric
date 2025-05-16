@@ -7,9 +7,9 @@
 @theme inline {
   --color-background: var(--background);
   --custom-gradient: linear-gradient(to bottom, #B78BF2 0%, #A8FF8A 100%);
+  --color: electricPurple:'#8338EC';
 
 
-  --electricPurple:'#8338EC';
   --limeGreen:'#A5DD9B';
   --sunnyYellow:'#FFE066';
 

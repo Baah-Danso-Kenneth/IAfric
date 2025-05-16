@@ -1,3 +1,5 @@
+import { SubMenusType } from "@/types/regular.dt";
+
 export const navLinks=[
     {name: '2025 trip calender',href:'/calender'},
     {name:'all experience',href:'/contacts'},
@@ -144,3 +146,17 @@ export const sponsorData = [
   {image:'/images/buy_save.png'},
 
 ]
+
+export const subMenus: SubMenusType = {
+  'all experience': [
+    { name: 'what we do', href: '/experience/what-we-do' },
+    { name: 'customer service', href: '/experience/customer-service' },
+    { name: 'our routine', href: '/experience/our-routine' },
+    { name: 'testimonies', href: '/experience/testimonies' }
+  ],
+  'about': [
+    { name: 'our team', href: '/about/team' },
+    { name: 'our history', href: '/about/history' },
+    { name: 'our mission', href: '/about/mission' }
+  ]
+};

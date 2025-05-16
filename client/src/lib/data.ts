@@ -134,3 +134,13 @@ export const ourStyleData=[
      image:'/images/booking.png'}
 
 ]
+
+export const sponsorData = [
+  {image:'/images/afr.png'},
+  {image:'/images/brust.png'},
+  {image:'/images/ldk.png'},
+  // {image:'/images/simln.svg'},
+  {image:'/images/btt.svg'},
+  {image:'/images/buy_save.png'},
+
+]

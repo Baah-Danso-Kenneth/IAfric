@@ -1,11 +1,13 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@plugin "tailwindcss-animate";
 
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --color-background: var(--background);
   --custom-gradient: linear-gradient(to bottom, #B78BF2 0%, #A8FF8A 100%);
+
 
   --electricPurple:'#8338EC';
   --limeGreen:'#A5DD9B';
@@ -220,4 +222,23 @@ input[type="number"]::-webkit-outer-spin-button {
 
 .animate-fadeIn {
   animation: fadeIn 0.2s ease-out forwards;
+}
+
+
+
+@keyframes loopScroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.animate-loopScroll {
+  animation: loopScroll 30s linear infinite;
+}
+
+.pause-animation {
+  animation-play-state: paused !important;
+}
+
+.hover\:pause-animation:hover {
+  animation-play-state: paused !important;
 }

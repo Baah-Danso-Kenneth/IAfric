@@ -9,10 +9,9 @@ import { FaXTwitter } from "react-icons/fa6";
 import { FaBoltLightning } from "react-icons/fa6";
 
 export default function Footer() {
-  // Track open state for each section independently
+
   const [openSections, setOpenSections] = useState<Record<number, boolean>>({});
 
-  // Toggle specific section by index
   const toggleSection = (index:any) => {
     setOpenSections(prev => ({
       ...prev,
@@ -21,12 +20,12 @@ export default function Footer() {
   }
 
   return (
-    <section className='py-10 border-t-2 border-black'>
+    <section className='py-10 border-t-2 border-black bg-[#c5e7c0]'>
       <div className='mx-auto max-w-[95%]'>
       
         <div className='hidden lg:grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-8 text-sm'>
           {footerLinks.map((section, index) => (
-            <div key={index} className="mb-8">
+            <div key={index+1} className="mb-8">
               <h1 className='uppercase font-bold mb-4'>{section.title}</h1>
               <ul className="space-y-3 flex flex-col">
                 {section.links.map((link, linkIndex) => (
@@ -53,7 +52,7 @@ export default function Footer() {
         <section className='max-w-7xl mx-auto'>
         <div className='lg:hidden space-y-4 '>
           {footerLinks.map((section, index) => (
-            <div key={index} className="border-b border-black pb-2 ">
+            <div key={index+1} className="border-b border-black pb-2 ">
               <div 
                 className='flex items-center justify-between cursor-pointer py-2 text-sm'
                 onClick={() => toggleSection(index)}
@@ -93,7 +92,7 @@ export default function Footer() {
 
         <div className='mt-5 lg:mt-0 flex items-center space-x-2 uppercase text-[12px] md:text-base'>
          <h1>Travel around africa </h1>
-          <FaBoltLightning className='text-yellow-500 text-[15px] md:text-3xl'/>
+          <FaBoltLightning className='text-[#8338EC] text-[15px] md:text-3xl'/>
            <h1> with lightning</h1>
         </div>
 

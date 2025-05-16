@@ -28,7 +28,7 @@ export function DefaultPage() {
         <Routine/>
         <OurWay/>
         <KindWords/>
-        <SubScription/>
+        <SubScription className="bg-[#8338EC]"/>
         <Footer/>
       </React.Fragment>
     )

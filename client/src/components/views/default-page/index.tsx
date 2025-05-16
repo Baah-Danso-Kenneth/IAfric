@@ -10,6 +10,8 @@ import React from 'react'
 import KindWords from './KindWords'
 import ExtraInfo from './ExtraInfo'
 import OurWay from './OurWay'
+import Sponsors from './Sponsors'
+import Routine from './Routine'
 
 
 export function DefaultPage() {
@@ -22,6 +24,8 @@ export function DefaultPage() {
         <HelpYouDecide/>
         <PeopleTaught/>
         <ExtraInfo/>
+        <Sponsors/>
+        <Routine/>
         <OurWay/>
         <KindWords/>
         <SubScription/>

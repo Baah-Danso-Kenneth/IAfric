@@ -8,7 +8,7 @@ function OurWay() {
       <div className='max-w-4xl mx-auto text-zinc-500'>
         <div className='text-center mb-8'>
           <h1 className='uppercase text-3xl md:text-4xl lg:text-5xl text-wrap'>
-            the <span className='font-delight_mother capitalize text-6xl mx-2'>travel Afrique</span> way
+            the <span className='font-delight_mother capitalize text-3xl lg:text-6xl mx-2'>travel Afrique</span> way
           </h1>
         </div>
 

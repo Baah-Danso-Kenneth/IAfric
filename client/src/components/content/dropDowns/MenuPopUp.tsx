@@ -41,7 +41,7 @@ function MenuPopUp({ onClose, isOpen = true }: MenuPopUpProps) {
     }, 300); // Match this with CSS transition time
   };
 
-  // If isOpen is explicitly false, don't render
+
   if (isOpen === false) return null;
 
   return (
@@ -58,7 +58,7 @@ function MenuPopUp({ onClose, isOpen = true }: MenuPopUpProps) {
               {subMenus[section.name] ? (
                 <button 
                   onClick={() => handleNavItemClick(section.name)}
-                  className="flex items-center justify-between w-full text-xl font-medium text-white py-3 px-4 rounded-lg hover:bg-purple-700 transition-colors"
+                  className="flex items-center gap-10 w-full text-xl font-medium text-white py-3 px-4 rounded-lg hover:bg-purple-700 transition-colors"
                 >
                   <span className='capitalize'>{section.name}</span>
                   <MdKeyboardDoubleArrowRight className="text-white" />

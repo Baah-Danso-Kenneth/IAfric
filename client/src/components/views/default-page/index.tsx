@@ -5,19 +5,32 @@ import {WhereWeGo} from './WhereWeGo'
 import {HelpYouDecide} from './HelpYouDecide'
 import PeopleTaught from './PeopleTaught'
 import SubScription from '@/components/content/common/SubScription'
+import Footer from '@/components/layout/Footer'
+import React from 'react'
+import KindWords from './KindWords'
+import ExtraInfo from './ExtraInfo'
+import OurWay from './OurWay'
+import Sponsors from './Sponsors'
+import Routine from './Routine'
 
 
 export function DefaultPage() {
     return (
-      <div>
+      <React.Fragment>
         <Header/>
         <HeroSection/>
         <LittleInfo/>
         <WhereWeGo/>
         <HelpYouDecide/>
         <PeopleTaught/>
-        <SubScription/>
-      </div>
+        <ExtraInfo/>
+        <Sponsors/>
+        <Routine/>
+        <OurWay/>
+        <KindWords/>
+        <SubScription className="bg-[#8338EC]"/>
+        <Footer/>
+      </React.Fragment>
     )
   }
   

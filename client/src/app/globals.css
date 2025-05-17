@@ -1,13 +1,15 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@plugin "tailwindcss-animate";
 
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --color-background: var(--background);
   --custom-gradient: linear-gradient(to bottom, #B78BF2 0%, #A8FF8A 100%);
+  --color: electricPurple:'#8338EC';
 
-  --electricPurple:'#8338EC';
+
   --limeGreen:'#A5DD9B';
   --sunnyYellow:'#FFE066';
 
@@ -15,7 +17,7 @@
   --font-bowlby:var(--font-bowlby);
   --font-dmMono:var(--font-dmMono);
   --font-play_flaire:var(--font-play_flaire);
-  --font-polt_waski:var(--font-polt_waski);
+  --font-delight_mother:var(--font-delight_mother);
   --font-outfit:var(--font-outfit);
 
   --color-foreground: var(--foreground);
@@ -198,4 +200,45 @@ input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
+}
+
+.hover-underline-animation{
+  @apply relative inline-block;
+}
+
+.hover-underline-animation::after{
+  content:'';
+  @apply absolute h-0.5 bg-black bottom-[-2px] left-0 w-0 transition-all duration-300;
+}
+
+.hover-underline-animation:hover::after{
+  @apply w-full;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.2s ease-out forwards;
+}
+
+
+
+@keyframes loopScroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.animate-loopScroll {
+  animation: loopScroll 30s linear infinite;
+}
+
+.pause-animation {
+  animation-play-state: paused !important;
+}
+
+.hover\:pause-animation:hover {
+  animation-play-state: paused !important;
 }

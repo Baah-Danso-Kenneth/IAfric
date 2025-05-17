@@ -3,10 +3,11 @@ import { Button } from "@/components/ui/button";
 import { whereweGoData } from "@/lib/data";
 
 export function WhereWeGo() {
-  return (
+  return ( 
     <section className="py-16 md:py-20 lg:py-24 bg-[#c5e7c0]">
-      {/* Section Header */}
+  
       <div className="container mx-auto px-4 sm:px-6">
+        
         <div className="text-center mb-12 md:mb-16">
           <h2 className="text-3xl sm:text-4xl md:text-5xl uppercase  text-[#8338EC] inline-block relative">
             <span className="relative z-10">Tour in Africa</span>

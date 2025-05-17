@@ -2,7 +2,8 @@ import { SubMenusType } from "@/types/regular.dt";
 
 export const navLinks=[
     {name: '2025 trip calender',href:'/calender'},
-    {name:'all experience',href:'/contacts'},
+    {name:'destination',href:'/destination'},
+    {name:'customize',href:'/customize'},
     {name:'shop', href:'/shop'},
     {name:'membership',href:'/memebership'},
     {name:'about',href:'/about'}
@@ -160,3 +161,34 @@ export const subMenus: SubMenusType = {
     { name: 'our mission', href: '/about/mission' }
   ]
 };
+
+export const dropDownContent={
+   'destination':[
+    {name:'ghana', href:'#'},
+    {name:'nigeria', href:'#'},
+    {name:'Tanzania', href:'#'},
+    {name:'zimbabue', href:'#'},
+    {name:'ghigana', href:'#'},
+    {name:'ghana', href:'#'},
+    {name:'ssssssssssssss', href:'#'},
+    {name:'ghana', href:'#'},
+    {name:'ghana', href:'#'},
+   ],
+
+   'about':[
+    {name:'our story', href:'#'},
+    {name:'meet the team', href:'#'},
+    {name:'carrers', href:'#'},
+    {name:'say hello', href:'#'},
+    {name:'faqs', href:'#'},
+    {name:'vlogs', href:'#'},
+
+
+   ],
+
+   'customize':[
+    {name:'custimize trip' , href:'#'},
+    {name:'detours', href:'#'},
+    {name:'concerge for group trips', href:'#'},
+   ]
+}

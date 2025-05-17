@@ -48,3 +48,16 @@ export interface MenuPopUpProps {
   onClose?: () => void;
   isOpen?: boolean;
 }
+
+export interface DropdownItem {
+  name: string;
+  href: string;
+}
+
+export interface CustomDropdownProps {
+  title: string;
+  items: DropdownItem[];
+  position?: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'left' | 'right';
+  className?: string;
+  buttonClassName?: string;
+}

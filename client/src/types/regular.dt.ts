@@ -61,3 +61,17 @@ export interface CustomDropdownProps {
   className?: string;
   buttonClassName?: string;
 }
+
+export type TeamMemberPros = {
+
+    name:string;
+    image:string;
+    role:string;
+  
+}
+
+export type NewDestinationProps={
+   image:string;
+   description:string;
+   price:number;
+}

@@ -242,3 +242,4 @@ input[type="number"]::-webkit-outer-spin-button {
 .hover\:pause-animation:hover {
   animation-play-state: paused !important;
 }
+

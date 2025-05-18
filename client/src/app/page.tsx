@@ -1,9 +1,9 @@
-import { DefaultPage } from "@/components/views/default-page"
+import { LandingPage } from "@/components/views/landing-page"
 
 
 function Page() {
 
-  return <DefaultPage/>
+  return <LandingPage/>
 }
 
 export default Page

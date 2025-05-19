@@ -75,3 +75,19 @@ export type NewDestinationProps={
    description:string;
    price:number;
 }
+
+export interface SlideProps{
+  heading: string;
+  text: string;
+  linkText:string;
+  linkUrl:string;
+}
+
+export type Carousel={
+  title:string;
+  slides: SlideProps[];
+}
+
+export interface TextCarouselProps {
+  carousels: Carousel[];
+}

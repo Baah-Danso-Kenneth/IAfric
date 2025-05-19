@@ -1,4 +1,6 @@
 import { NewDestinationProps , SubMenusType, TeamMemberPros } from "@/types/regular.dt";
+import { Languages, User } from "lucide-react";
+
 
 export const navLinks=[
     {name: '2025 trip calender',href:'/calender'},
@@ -286,5 +288,59 @@ export const newDestinationData:NewDestinationProps[]=[
    {price:2500 , image:'/images/hero-img.jpg', description:'Enjoy the resortness of spectroum'},
    {price:2500 , image:'/images/hero-img.jpg', description:'Enjoy the resortness of spectroum'},
    {price:2500 , image:'/images/hero-img.jpg', description:'Enjoy the resortness of spectroum'},
+]
 
+export const someHeaderData=[
+  {name:'Travels', href:'#'},
+  {name:'Previous trip', href:'#'},
+  {name:'prices ', href:'#'},
+  {name:'most visited sites', href:'#'},
+]
+
+export const joinData=[
+  {name:'join us', icon:User },
+  {name:'languages', icon:Languages},
+]
+
+export const carouselData = [
+  {
+    slides: [
+      {
+        text: "Visit our site",
+        linkText: "Our Services",
+        linkUrl: "/services"
+      },
+      {
+        text: "Learn more about us",
+        linkText: "About",
+        linkUrl: "/about"
+      },
+      {
+        text: "Need a product?",
+        linkText: "See Products",
+        linkUrl: "/products"
+      }
+    ]
+  }
+];
+
+export const topSiteData=[
+  {
+    'most visited':[
+      {name:'Ghana',path:'#'},
+      {name:'Ghana',path:'#'},
+      {name:'Ghana',path:'#'},
+      {name:'Ghana',path:'#'},
+      {name:'Ghana',path:'#'},
+
+
+    ]
+  }
+]
+
+export const popularSites=[
+  {image:'/images/hero-img.jpg'},
+  {image:'/images/hero-img.jpg'},
+  {image:'/images/hero-img.jpg'},
+  {image:'/images/hero-img.jpg'},
 ]

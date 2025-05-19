@@ -1,4 +1,5 @@
 import NewSeasonDestinationCard from '@/components/content/cards/NewSeasonDestinationCard'
+import Inscription from '@/components/content/shared/Inscription'
 import { newDestinationData } from '@/lib/data'
 import Link from 'next/link'
 import React from 'react'
@@ -11,10 +12,10 @@ function InfoSegement() {
             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reprehenderit, iure.</p>
 
                     <div className='flex items-center justify-center flex-col'>
-                        <Link href="/welcome" className="relative text-[20px] bg-transparent hover:bg-transparent ">
+                        <Link href="/welcome" className="relative text-sm lg:text-[20px] bg-transparent hover:bg-transparent ">
                             <span className="relative z-10 text-white">Let&apos;s go</span>
                             </Link>
-                        <div className='bg-white h-1 w-10'/>
+                        <div className='bg-white h-[0.5px] lg:h-1 w-10'/>
                      </div>
             
         </div>

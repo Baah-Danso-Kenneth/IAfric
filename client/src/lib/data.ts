@@ -178,7 +178,7 @@ export const dropDownContent={
    ],
 
    'about':[
-    {name:'our story', href:'#'},
+    {name:'our mission', href:'/about/ourMission/'},
     {name:'meet the team', href:'/about/meetTeam/'},
     {name:'carrers', href:'#'},
     {name:'say hello', href:'#'},

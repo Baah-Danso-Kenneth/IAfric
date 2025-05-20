@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 
 function ExtraInfo() {
   return (
-    <section className="bg-[#8338EC] py-20">
+    <section className="bg-[#8338EC] py-10">
       <div className="max-w-7xl mx-auto">
         {/* Image Container */}
         <div className="relative w-full h-[400px] md:h-[500px] lg:h-[600px]  overflow-hidden">

@@ -98,8 +98,8 @@ export default function Footer() {
 
           <div className='flex items-center flex-wrap'>
             {retro.map((items,index)=>(
-              <div>
-              <Link href={items.path} key={index+1}>
+              <div  key={index+1}>
+              <Link href={items.path}>
                 <span className='capitalize text-[10px]'>{items.name}</span>
               </Link>
                {index < retro.length -1 && (

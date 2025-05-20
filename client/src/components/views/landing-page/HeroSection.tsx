@@ -3,7 +3,7 @@ import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 
-function HeroSection() {
+function SectionElapse() {
   return (
     <div className='relative w-full h-screen'>
       <div className='grid grid-cols-1 lg:grid-cols-2 h-full w-full'>
@@ -63,4 +63,4 @@ function HeroSection() {
   )
 }
 
-export default HeroSection
+export default SectionElapse

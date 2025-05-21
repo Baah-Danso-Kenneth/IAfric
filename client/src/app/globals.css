@@ -242,3 +242,14 @@ input[type="number"]::-webkit-outer-spin-button {
 .hover\:pause-animation:hover {
   animation-play-state: paused !important;
 }
+
+
+
+@keyframes fade {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+.animate-fade {
+  animation: fade 0.5s ease-in-out;
+}

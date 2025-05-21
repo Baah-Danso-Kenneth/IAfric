@@ -67,7 +67,7 @@ export default function Footer() {
               {openSections[index] && (
                 <div className="pl-2 py-2 space-y-3 animate-fadeIn">
                   {section.links.map((link, linkIndex) => (
-                    <div key={linkIndex}>
+                    <div key={linkIndex+1}>
                       <Link href={link.href} className="capitalize block hover:text-gray-600">
                         <span className='text-[15px]'>{link.name}</span>
                       </Link>
@@ -98,8 +98,8 @@ export default function Footer() {
 
           <div className='flex items-center flex-wrap'>
             {retro.map((items,index)=>(
-              <div>
-              <Link href={items.path} key={index}>
+              <div  key={index+1}>
+              <Link href={items.path}>
                 <span className='capitalize text-[10px]'>{items.name}</span>
               </Link>
                {index < retro.length -1 && (

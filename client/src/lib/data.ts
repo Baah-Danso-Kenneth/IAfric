@@ -1,4 +1,6 @@
-import { SubMenusType } from "@/types/regular.dt";
+import { NewDestinationProps , SubMenusType, TeamMemberPros } from "@/types/regular.dt";
+import { Languages, User } from "lucide-react";
+
 
 export const navLinks=[
     {name: '2025 trip calender',href:'/calender'},
@@ -176,8 +178,8 @@ export const dropDownContent={
    ],
 
    'about':[
-    {name:'our story', href:'#'},
-    {name:'meet the team', href:'#'},
+    {name:'our mission', href:'/about/ourMission/'},
+    {name:'meet the team', href:'/about/meetTeam/'},
     {name:'carrers', href:'#'},
     {name:'say hello', href:'#'},
     {name:'faqs', href:'#'},
@@ -192,3 +194,153 @@ export const dropDownContent={
     {name:'concerge for group trips', href:'#'},
    ]
 }
+
+
+export const teamMembersData:TeamMemberPros[]=[
+
+  {name:'kenneth danso' , image:'/images/hero-img.jpg', role:'founder & ceo'},
+  {name:'kenneth danso' , image:'/images/hero-img.jpg', role:'founder & ceo'},
+  {name:'kenneth danso' , image:'/images/hero-img.jpg', role:'founder & ceo'},
+  {name:'kenneth danso' , image:'/images/hero-img.jpg', role:'founder & ceo'},
+  {name:'kenneth danso' , image:'/images/hero-img.jpg', role:'founder & ceo'},
+  {name:'kenneth danso' , image:'/images/hero-img.jpg', role:'founder & ceo'},
+  {name:'kenneth danso' , image:'/images/hero-img.jpg', role:'founder & ceo'},
+  {name:'kenneth danso' , image:'/images/hero-img.jpg', role:'founder & ceo'},
+  {name:'kenneth danso' , image:'/images/hero-img.jpg', role:'founder & ceo'},
+  {name:'kenneth danso' , image:'/images/hero-img.jpg', role:'founder & ceo'},
+  
+]
+
+export const outTro=[
+  {name:'trip dates', query:'#'},
+  {name:'the itenary', query:'#'},
+  {name:'accomodations', query:'#'},
+  {name:'whats included', query:'#'},
+  {name:'trip leaders', query:'#'},
+  {name:'faq', query:'#'}
+]
+
+export const allInclusiveData=[
+
+  {country:'Ghana',
+   btnText:'travel to ghana',
+   'members':[
+    {name:'kenneth danso' , image:'/images/hero-img.jpg', role:'founder & ceo'},
+    {name:'kenneth danso' , image:'/images/hero-img.jpg', role:'founder & ceo'},
+    {name:'kenneth danso' , image:'/images/hero-img.jpg', role:'founder & ceo'},
+    {name:'kenneth danso' , image:'/images/hero-img.jpg', role:'founder & ceo'},
+   ]
+   },
+
+
+   {country:'Tanzania',
+    btnText:'travel to ghana',
+    'members':[
+     {name:'kenneth danso' , image:'/images/hero-img.jpg', role:'founder & ceo'},
+     {name:'kenneth danso' , image:'/images/hero-img.jpg', role:'founder & ceo'},
+     {name:'kenneth danso' , image:'/images/hero-img.jpg', role:'founder & ceo'},
+     {name:'kenneth danso' , image:'/images/hero-img.jpg', role:'founder & ceo'},
+    ]
+    },
+
+    {country:'Nigeria',
+      btnText:'travel to ghana',
+      'members':[
+       {name:'kenneth danso' , image:'/images/hero-img.jpg', role:'founder & ceo'},
+       {name:'kenneth danso' , image:'/images/hero-img.jpg', role:'founder & ceo'},
+       {name:'kenneth danso' , image:'/images/hero-img.jpg', role:'founder & ceo'},
+       {name:'kenneth danso' , image:'/images/hero-img.jpg', role:'founder & ceo'},
+      ]
+    },
+
+    {country:'Madagascar',
+      btnText:'travel to ghana',
+      'members':[
+       {name:'kenneth danso' , image:'/images/hero-img.jpg', role:'founder & ceo'},
+       {name:'kenneth danso' , image:'/images/hero-img.jpg', role:'founder & ceo'},
+       {name:'kenneth danso' , image:'/images/hero-img.jpg', role:'founder & ceo'},
+       {name:'kenneth danso' , image:'/images/hero-img.jpg', role:'founder & ceo'},
+      ]
+      },
+      {country:'Egypt',
+        btnText:'travel to ghana',
+        'members':[
+         {name:'kenneth danso' , image:'/images/hero-img.jpg', role:'founder & ceo'},
+         {name:'kenneth danso' , image:'/images/hero-img.jpg', role:'founder & ceo'},
+         {name:'kenneth danso' , image:'/images/hero-img.jpg', role:'founder & ceo'},
+         {name:'kenneth danso' , image:'/images/hero-img.jpg', role:'founder & ceo'},
+        ]
+        },
+        {country:'Tanzania',
+          btnText:'travel to ghana',
+          'members':[
+           {name:'kenneth danso' , image:'/images/hero-img.jpg', role:'founder & ceo'},
+           {name:'kenneth danso' , image:'/images/hero-img.jpg', role:'founder & ceo'},
+           {name:'kenneth danso' , image:'/images/hero-img.jpg', role:'founder & ceo'},
+           {name:'kenneth danso' , image:'/images/hero-img.jpg', role:'founder & ceo'},
+          ]
+          }
+]
+
+
+export const newDestinationData:NewDestinationProps[]=[
+   {price:2500 , image:'/images/hero-img.jpg', description:'Enjoy the resortness of spectroum'},
+   {price:2500 , image:'/images/hero-img.jpg', description:'Enjoy the resortness of spectroum'},
+   {price:2500 , image:'/images/hero-img.jpg', description:'Enjoy the resortness of spectroum'},
+   {price:2500 , image:'/images/hero-img.jpg', description:'Enjoy the resortness of spectroum'},
+]
+
+export const someHeaderData=[
+  {name:'Travels', href:'#'},
+  {name:'Previous trip', href:'#'},
+  {name:'prices ', href:'#'},
+  {name:'most visited sites', href:'#'},
+]
+
+export const joinData=[
+  {name:'join us', icon:User },
+  {name:'languages', icon:Languages},
+]
+
+export const carouselData = [
+  {
+    slides: [
+      {
+        text: "Visit our site",
+        linkText: "Our Services",
+        linkUrl: "/services"
+      },
+      {
+        text: "Learn more about us",
+        linkText: "About",
+        linkUrl: "/about"
+      },
+      {
+        text: "Need a product?",
+        linkText: "See Products",
+        linkUrl: "/products"
+      }
+    ]
+  }
+];
+
+export const topSiteData=[
+  {
+    'most visited':[
+      {name:'Ghana',path:'#'},
+      {name:'Ghana',path:'#'},
+      {name:'Ghana',path:'#'},
+      {name:'Ghana',path:'#'},
+      {name:'Ghana',path:'#'},
+
+
+    ]
+  }
+]
+
+export const popularSites=[
+  {image:'/images/hero-img.jpg'},
+  {image:'/images/hero-img.jpg'},
+  {image:'/images/hero-img.jpg'},
+  {image:'/images/hero-img.jpg'},
+]

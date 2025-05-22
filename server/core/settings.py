@@ -32,11 +32,15 @@ INSTALLED_APPS = [
     'apps.memberships',
     'apps.users',
     'apps.lightningPayments',
-    'apps.destinations',
+    'apps.experiences',
     'apps.shops',
     'apps.auths',
     'apps.carts',
     'apps.orders',
+    'apps.bookings',
+    'apps.locations',
+    'apps.reviews',
+    'apps.itineraries',
 
     #ThirdParty apps
     'rest_framework',

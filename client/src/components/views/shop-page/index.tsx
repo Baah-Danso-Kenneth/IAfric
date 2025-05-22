@@ -2,14 +2,14 @@ import Footer from '@/components/layout/Footer'
 import { Header } from '@/components/layout/Header'
 import React from 'react'
 
-function MemberShipPage() {
+function ShopPage() {
   return (
     <React.Fragment>
         <Header/>
-          membership
+        Shop
         <Footer/>
-        </React.Fragment>
+    </React.Fragment>
   )
 }
 
-export default MemberShipPage
+export default ShopPage

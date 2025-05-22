@@ -19,9 +19,7 @@ export function LandingPage() {
         <InfoSegement/>
         <DoubleSection/>
         <VacationEssentials/>
-        {/* <HeroSection/> */}
         <Footer/>
-        {/* <TrendingTourDropDown/> */}
     </React.Fragment>
   )
 }

@@ -4,7 +4,7 @@ import React from 'react'
 
 function CarouselWithText() {
   return (
-    <section className='border border-b-2 border-l-0 border-r-0 border-t-0 p-3'>
+    <section className='border border-b-2 border-l-0 border-r-0 border-t-0 p-3  bg-texture'>
         <div className='max-w-7xl mx-auto flex items-center justify-center  lg:justify-between'>
             <div></div>
             <div>

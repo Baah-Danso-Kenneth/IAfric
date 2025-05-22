@@ -253,3 +253,12 @@ input[type="number"]::-webkit-outer-spin-button {
 .animate-fade {
   animation: fade 0.5s ease-in-out;
 }
+
+
+.bg-texture{
+  background-image: url("/images/bg-texture.webp");
+  background-size: 720px 460px;
+  background-repeat: repeat;
+  background-position: center;
+}
+

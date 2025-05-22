@@ -38,7 +38,7 @@ const delight_mother = localFont({
 
 
 export const metadata: Metadata = {
-  title: "BITOFRIC",
+  title: "LITRAFRIK",
   description: "Lets travel africa together",
 };
 

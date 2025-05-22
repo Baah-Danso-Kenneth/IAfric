@@ -7,7 +7,7 @@ export const navLinks=[
     {name:'destination',href:'/destination'},
     {name:'customize',href:'/customize'},
     {name:'shop', href:'/shop'},
-    {name:'membership',href:'/memebership'},
+    {name:'membership',href:'/membership'},
     {name:'about',href:'/about'}
 ]
 
@@ -151,16 +151,16 @@ export const sponsorData = [
 ]
 
 export const subMenus: SubMenusType = {
-  'all experience': [
-    { name: 'what we do', href: '/experience/what-we-do' },
-    { name: 'customer service', href: '/experience/customer-service' },
-    { name: 'our routine', href: '/experience/our-routine' },
-    { name: 'testimonies', href: '/experience/testimonies' }
+  'destination': [
+    { name: 'Ghana', href: '/experience/what-we-do' },
+    { name: 'Zimbabwe ', href: '/experience/customer-service' },
+    { name: 'Egypt', href: '/experience/our-routine' },
+    { name: 'Mali', href: '/experience/testimonies' }
   ],
   'about': [
-    { name: 'our team', href: '/about/team' },
+    { name: 'our team', href: '/about/meetTeam/' },
     { name: 'our history', href: '/about/history' },
-    { name: 'our mission', href: '/about/mission' }
+    { name: 'our mission', href: '/about/ourMission' }
   ]
 };
 

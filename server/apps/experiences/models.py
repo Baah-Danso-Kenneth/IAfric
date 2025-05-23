@@ -96,7 +96,7 @@ class Experience(models.Model):
     season_note = models.TextField(blank=True, null=True)  # From first code
 
     # Main image
-    main_image = models.ImageField(upload_to='experiences/', null=True, blank=True)  # From first code
+    main_image = models.ImageField(upload_to='experiences/backdrop/', null=True, blank=True)  # From first code
 
     # Historical/cultural information
     historical_content = models.TextField(blank=True, null=True)

@@ -5,14 +5,10 @@ from .models import (
     TourGuide
 )
 class LocationSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Location
-        fields = [
-            'id', 'name', 'slug', 'address', 'city', 'state_province', 'country',
-            'latitude', 'longitude', 'coordinates', 'description', 'image', 'region_map',
-            'best_time_title', 'best_time_description', 'weather_title', 'weather_description',
-            'is_reverse_season', 'season_note'
-        ]
+        fields = ('__all__')
     def get_coordinates(self,obj):
         if obj.latitude and obj.longitude:
             return {

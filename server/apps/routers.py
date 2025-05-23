@@ -10,5 +10,5 @@ router = routers.SimpleRouter()
 
 urlpatterns=[
     *router.urls,
-    path('all-experience/',  ExperienceDetailView.as_view(), name='experience-data'),
+    path('all-experience/<slug:slug>/',  ExperienceDetailView.as_view(), name='experience-data'),
 ]

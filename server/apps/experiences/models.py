@@ -59,13 +59,9 @@ class Experience(models.Model):
     # Basic details
     short_description = models.TextField(help_text="Brief summary for listings")
     description = models.TextField()
-    categories = models.ManyToManyField(ExperienceCategory)
-    location = models.ForeignKey(Location, on_delete=models.PROTECT)
-    place_name = models.CharField(max_length=200, null=True, blank=True)  # From first code
-
-    # Tour guide assignment (optional)
-    guide = models.ForeignKey(TourGuide, on_delete=models.SET_NULL, null=True, blank=True,
-                              related_name='experiences')
+    category = models.ForeignKey(ExperienceCategory, on_delete=models.PROTECT,default=1)
+    location = models.ManyToManyField(Location)
+    place_name = models.CharField(max_length=200, null=True, blank=True)  
 
     # Key experience attributes
     duration_minutes = models.PositiveIntegerField(help_text="Duration in minutes")
@@ -140,6 +136,10 @@ class Experience(models.Model):
             return f"{hours} hour{'s' if hours != 1 else ''}"
         else:
             return f"{minutes} minute{'s' if minutes != 1 else ''}"
+
+    @property
+    def available_guides(self):
+        return TourGuide.objects.filter(location__in=self.location.all()).distinct()
 
     def available_dates(self, start_date=None, days_ahead=30):
         """Get available dates for this experience"""

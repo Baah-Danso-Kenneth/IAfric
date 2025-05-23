@@ -1,3 +1,11 @@
-from django.shortcuts import render
+from rest_framework.generics import RetrieveAPIView
+from .models import Experience
+from .serializers import ExperienceAllInOneSerializer
 
-# Create your views here.
+class ExperienceDetailView(RetrieveAPIView):
+    queryset = Experience.objects.prefetch_related(
+        'categories', 'experienceimage_set', 'experiencesession_set', 'location', 'guide'
+    )
+    serializer_class = ExperienceAllInOneSerializer
+    lookup_field = 'slug'
+

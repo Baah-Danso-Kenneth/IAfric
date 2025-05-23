@@ -10,16 +10,14 @@ from apps.lightningPayments.models import LightningPayment
 import uuid
 
 
-
 class Location(models.Model):
-    """Locations where experiences take place"""
     name = models.CharField(max_length=255)
+
     slug = models.SlugField(max_length=255, unique=True, blank=True)
     address = models.TextField(blank=True)
     city = models.CharField(max_length=100)
     state_province = models.CharField(max_length=100, blank=True)
     country = models.CharField(max_length=100)
-
     # Geo coordinates for mapping
     latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
     longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
@@ -28,7 +26,6 @@ class Location(models.Model):
     image = models.ImageField(upload_to="experiences/locations/", blank=True, null=True)
     region_map = models.ImageField(upload_to='maps/', blank=True, null=True)
 
-    # Weather and season information
     best_time_title = models.CharField(max_length=30, blank=True, null=True)
     best_time_description = models.TextField(blank=True, null=True)
     weather_title = models.CharField(max_length=30, blank=True, null=True)
@@ -58,11 +55,11 @@ class TourGuide(models.Model):
     # Contact information
     email = models.EmailField(blank=True)
     phone = models.CharField(max_length=50, blank=True)
-
-    # Social media links
     website = models.URLField(blank=True)
     instagram = models.CharField(max_length=100, blank=True)
-
+    location = models.ManyToManyField("Location",
+                                 related_name="tour_guides"
+                                 )
     # Qualifications and specialties
     languages = models.JSONField(default=list, blank=True)
     specialties = models.JSONField(default=list, blank=True)

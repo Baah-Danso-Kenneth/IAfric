@@ -127,6 +127,15 @@ export const retro=[
 ]
 
 
+export const directionLinks=[
+  {name:'trip dates', path:'#'},
+  {name:'the itinerary', path:'#'},
+  {name:'accomodations', path:'#'},
+  {name:'what is included', path:'#'},
+  {name:'trip leaders', path:'#'},
+  {name:'faqs', path:'#'}
+]
+
 export const ourStyleData=[
   {title:'small groups',
      description:'We really hate shouting across the dinner table, so we cap our group size at 10-12 women per trip. No ifs, ands, or buts about it.',

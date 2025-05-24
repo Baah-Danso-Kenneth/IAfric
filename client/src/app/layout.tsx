@@ -3,6 +3,7 @@ import localFont from 'next/font/local'
 import "./globals.css";
 import { Suspense } from "react";
 import PageTransitionLoader from "@/components/content/common/PageTransitionLoader";
+import { Providers } from "./Provider";
 
 
 const bowlby = localFont({
@@ -57,9 +58,12 @@ export default function RootLayout({
   font-outfit antialiased text-softCharcoal  overflow-x-hidden`}
 >
   <PageTransitionLoader/>
+  <Providers>
   <div id='content'>
     {children}
   </div>
+  </Providers>
+
 
 </body>
 

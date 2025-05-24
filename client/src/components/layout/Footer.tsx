@@ -20,7 +20,7 @@ export default function Footer() {
   }
 
   return (
-    <section className='py-10 border-t-2 border-black  bg-texture'>
+    <section className='py-10  bg-texture'>
       <div className='mx-auto max-w-[95%]'>
       
         <div className='hidden lg:grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-8 text-sm'>

@@ -23,7 +23,7 @@ export function HeroSection() {
 <div
   className={clsx(
     MASK_CLASSES,
-    "bg-white absolute inset-0 h-full top-2 sm:top-6 md:top-2  xl:top-4"
+    "bg-[#8338EC] absolute inset-0 h-full top-2 sm:top-6 md:top-2  xl:top-4"
   )}
 />
 

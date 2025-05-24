@@ -73,7 +73,10 @@ class ExperienceAllInOneSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "slug",
+            "main_image",
             "name",
+            "duration_days",
+            "duration_nights",
             "place_name",
             "description",
             "short_description",

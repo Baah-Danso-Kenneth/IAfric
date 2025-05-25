@@ -1,12 +1,25 @@
+export type TourGuide = {
+  id: number;
+  name: string;
+  slug: string;
+  bio: string;
+  image: string;
+  location?:Location[]
+};
+
+
 export type Location = {
     id: number;
     name: string;
     description: string;
     city: string;
+    image:string;
     country: string;
+    meal_included:string;
     slug: string;
     latitude: string;
     longitude: string;
+    tour_guides?: TourGuide[]
   };
   
   export type Category = {

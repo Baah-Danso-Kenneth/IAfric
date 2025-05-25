@@ -5,15 +5,17 @@ import React from 'react'
 function HeroSection({ data }:  LocationHeroSection ) {
   return (
     <div className="relative w-full h-[50vh]">
+      {data?.main_image ? (
+              <Image
+              src={data.main_image}
+              alt={data?.name}
+              fill
+              className="object-cover"
+              sizes="100vw"
+              priority
+            />
+      ):null}
 
-      <Image
-        src={data?.main_image}
-        alt={data?.name}
-        fill
-        className="object-cover"
-        sizes="100vw"
-        priority
-      />
 
     
       <div className="absolute inset-0 bg-black/20 z-10" />

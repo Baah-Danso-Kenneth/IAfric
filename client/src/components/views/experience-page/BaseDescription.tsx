@@ -9,7 +9,7 @@ function BaseDescription({data}:BaseDescriptionProps) {
     <div className='bg-[#c5e7c0] bg-texture'>
     <div className=' max-w-7xl mx-auto py-10 lg:py-20 bg-cover space-y-3 lg:space-y-10'>
             <div className='flex items-center justify-center'>
-                <h1 className='text-[20px] text-wrap md:text-4xl lg:text-6xl uppercase text-[#8338EC] font-outfit'>litrafric X {data.name}</h1>
+                <h1 className='text-[20px] text-wrap md:text-4xl lg:text-6xl uppercase text-[#8338EC] font-outfit'>litrafric X {data?.name}</h1>
             </div>
 
              <div className='text-zinc-800  flex text-sm md:text-[20px] items-center justify-center space-x-3 uppercase lg:text-2xl'>

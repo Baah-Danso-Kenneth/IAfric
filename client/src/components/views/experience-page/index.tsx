@@ -9,6 +9,7 @@ import React from 'react'
 import HeroSection from './HeroSection';
 import BaseDescription from './BaseDescription';
 import Itinerary from './Itinerary';
+import TourGuides from './TourGuides';
 
 function ExperiencePage({slug}: ExperiencePageProps) {
     const {data, isLoading} = useGetExperienceQuery(slug);
@@ -21,6 +22,7 @@ function ExperiencePage({slug}: ExperiencePageProps) {
             <HeroSection data={data}/>
             <BaseDescription data={data}/>
             <Itinerary data={data}/>
+            <TourGuides data={data}/>
         <Footer/>
     </React.Fragment>
   )

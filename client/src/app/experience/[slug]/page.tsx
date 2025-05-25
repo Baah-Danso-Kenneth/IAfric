@@ -2,18 +2,17 @@ import ExperiencePage from '@/components/views/experience-page'
 import { PageProps } from '@/types/regular.dt';
 import React from 'react'
 
-
-
-export async function generateMetadata({params}:PageProps){
-  const country = params.slug;
+export async function generateMetadata({ params }: PageProps) {
+  const { slug } = await params;
+  const country = slug;
 
   return {
     title: `${country.charAt(0).toUpperCase() + country.slice(1)}`,
-    description: `Exlore excititing experiene in ${country}`
-  }
+    description: `Explore exciting experiences in ${country}`
+  };
 }
 
-export default function Experience({params}:PageProps) {
-  return <ExperiencePage slug={params.slug}/>
+export default async function Experience({ params }: PageProps) {
+  const { slug } = await params;
+  return <ExperiencePage slug={slug} />
 }
-

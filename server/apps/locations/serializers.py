@@ -4,11 +4,27 @@ from .models import (
     LocationDetails,
     TourGuide
 )
-class LocationSerializer(serializers.ModelSerializer):
 
+class TourGuideSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TourGuide
+        fields = [
+            'id', 'name', 'slug', 'bio', 'image', 'email', 'phone',
+            'website', 'instagram', 'languages', 'specialties','location',
+            'years_experience',  'created_at', 'updated_at'
+        ]
+
+
+
+class LocationSerializer(serializers.ModelSerializer):
+    tour_guides = TourGuideSerializer(many=True, read_only=True)
     class Meta:
         model = Location
-        fields = ('__all__')
+        fields = [
+            'id', 'name', 'slug', 'description', 'city', 'country', 'meal_included',
+            'latitude', 'longitude', 'image', 'tour_guides'
+        ]
+
     def get_coordinates(self,obj):
         if obj.latitude and obj.longitude:
             return {
@@ -26,17 +42,3 @@ class LocationDetailsSerializer(serializers.ModelSerializer):
         fields = ['map_image', 'best_time_to_visit', 'weather_info']
 
 
-class TourGuideSerializer(serializers.ModelSerializer):
-    """Serializer for tour guides"""
-    experience_count = serializers.SerializerMethodField()
-
-    class Meta:
-        model = TourGuide
-        fields = [
-            'id', 'name', 'slug', 'bio', 'image', 'email', 'phone',
-            'website', 'instagram', 'languages', 'specialties',
-            'years_experience', 'experience_count', 'created_at', 'updated_at'
-        ]
-
-    def get_experience_count(self, obj):
-        return obj.experiences.filter(is_active=True).count()

@@ -16,6 +16,7 @@ class Location(models.Model):
     slug = models.SlugField(max_length=255, unique=True, blank=True)
     address = models.TextField(blank=True)
     city = models.CharField(max_length=100)
+    meal_included = models.CharField(max_length=100, blank=True, help_text="e.g. 'Breakfast and Dinner'")
     state_province = models.CharField(max_length=100, blank=True)
     country = models.CharField(max_length=100)
     # Geo coordinates for mapping

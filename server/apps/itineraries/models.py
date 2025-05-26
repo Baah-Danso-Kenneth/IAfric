@@ -21,7 +21,6 @@ class Accommodation(models.Model):
     def __str__(self):
         return self.name or f"Accommodation for {self.experience.name}"
 
-
 class IncludedItem(models.Model):
     experience = models.ForeignKey(Experience, on_delete=models.CASCADE, related_name='included_items')
     text = models.CharField(max_length=255)
@@ -29,14 +28,12 @@ class IncludedItem(models.Model):
     def __str__(self):
         return f"Included: {self.text}"
 
-
 class NotIncludedItem(models.Model):
-    experience = models.ForeignKey(Experience, on_delete=models.CASCADE, related_name='not_included_items')
+    experience = models.ForeignKey('apps_experiences.Experience', on_delete=models.CASCADE, related_name='not_included_items')
     text = models.CharField(max_length=255)
 
     def __str__(self):
         return f"Not Included: {self.text}"
-
 
 class Recommendation(models.Model):
     experience = models.ForeignKey(Experience, on_delete=models.CASCADE, related_name='recommendations')
@@ -46,14 +43,12 @@ class Recommendation(models.Model):
     def __str__(self):
         return f"{self.person_name}'s Recommendation"
 
-
 class HistoricalInfo(models.Model):
     experience = models.ForeignKey(Experience, on_delete=models.CASCADE, related_name='histories')
     content = models.TextField()
 
     def __str__(self):
         return f"History of {self.experience.place_name or self.experience.name}"
-
 
 class MapAndContent(models.Model):
 
@@ -66,7 +61,6 @@ class MapAndContent(models.Model):
 
     def __str__(self):
         return f"{self.best_time_title or self.experience.name}"
-
 
 class Itinerary(models.Model):
     """Multi-day itinerary for experiences"""
@@ -86,3 +80,4 @@ class Itinerary(models.Model):
 
     def __str__(self):
         return f"{self.experience.name} - Day {self.day_number}: {self.title}"
+

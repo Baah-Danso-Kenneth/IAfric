@@ -40,5 +40,3 @@ class LocationDetailsSerializer(serializers.ModelSerializer):
     class Meta:
         model = LocationDetails
         fields = ['map_image', 'best_time_to_visit', 'weather_info']
-
-

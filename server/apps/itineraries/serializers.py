@@ -6,6 +6,10 @@ NotIncludedItem, Recommendation, HistoricalInfo, MapAndContent
 )
 from apps.locations.models import TourGuide
 from apps.reviews.models import TripBatch
+from apps.experiences.models import *
+
+from ..experiences.models import KindWords
+
 
 class TourGuideSerializer(serializers.ModelSerializer):
 
@@ -22,15 +26,12 @@ class TourGuideSerializer(serializers.ModelSerializer):
     def get_experience_count(self, obj):
         return obj.experiences.filter(is_active=True).count()
 
-
-
 class AccommodationSerializer(serializers.ModelSerializer):
     """Serializer for accommodations"""
 
     class Meta:
         model = Accommodation
         fields = ['id', 'name', 'description', 'location', 'image']
-
 
 class IncludedItemSerializer(serializers.ModelSerializer):
     """Serializer for included items"""
@@ -39,14 +40,12 @@ class IncludedItemSerializer(serializers.ModelSerializer):
         model = IncludedItem
         fields = ['id', 'text']
 
-
 class NotIncludedItemSerializer(serializers.ModelSerializer):
     """Serializer for not included items"""
 
     class Meta:
         model = NotIncludedItem
         fields = ['id', 'text']
-
 
 class RecommendationSerializer(serializers.ModelSerializer):
     """Serializer for recommendations"""
@@ -55,14 +54,12 @@ class RecommendationSerializer(serializers.ModelSerializer):
         model = Recommendation
         fields = ['id', 'person_name', 'message']
 
-
 class HistoricalInfoSerializer(serializers.ModelSerializer):
     """Serializer for historical information"""
 
     class Meta:
         model = HistoricalInfo
         fields = ['id', 'content']
-
 
 class MapAndContentSerializer(serializers.ModelSerializer):
     """Serializer for map and content details"""
@@ -74,7 +71,6 @@ class MapAndContentSerializer(serializers.ModelSerializer):
             'weather_title', 'weather_time_des'
         ]
 
-
 class ItinerarySerializer(serializers.ModelSerializer):
     """Serializer for itineraries"""
 
@@ -85,7 +81,6 @@ class ItinerarySerializer(serializers.ModelSerializer):
             'meal_included', 'meal_description', 'accommodation_included',
             'accommodation_details'
         ]
-
 
 class TripBatchSerializer(serializers.ModelSerializer):
     """Serializer for trip batches"""
@@ -114,3 +109,8 @@ class TripBatchSerializer(serializers.ModelSerializer):
             return 'almost_full'
         else:
             return 'available'
+
+class KindWordSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = KindWords
+        fields = ('__all__')

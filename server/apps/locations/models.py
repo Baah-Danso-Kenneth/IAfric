@@ -45,7 +45,6 @@ class Location(models.Model):
     def __str__(self):
         return f"{self.name}, {self.city}, {self.country}"
 
-
 class TourGuide(models.Model):
     """Tour guides that lead experiences"""
     name = models.CharField(max_length=100)
@@ -76,7 +75,6 @@ class TourGuide(models.Model):
 
     def __str__(self):
         return self.name
-
 
 class LocationDetails(models.Model):
     """Additional location details (from first code)"""

@@ -7,7 +7,7 @@ export async function generateMetadata({ params }: PageProps) {
   const country = slug;
 
   return {
-    title: `${country.charAt(0).toUpperCase() + country.slice(1)}`,
+    title: `Experience ${country.charAt(0).toUpperCase() + country.slice(1)}`,
     description: `Explore exciting experiences in ${country}`
   };
 }

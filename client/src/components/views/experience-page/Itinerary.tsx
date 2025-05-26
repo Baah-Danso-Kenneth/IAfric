@@ -17,7 +17,7 @@ function Itinerary({data}:ItinirariesProps) {
 
         <div className='space-y-16'>
           {data?.location.map((loc,index)=>(
-            <div className="mx-10 grid grid-cols-1 xl:grid-cols-2 gap-8 max-w-6xl items-start lg:mx-auto">
+            <div key={index} className="mx-10 grid grid-cols-1 xl:grid-cols-2 gap-8 max-w-6xl items-start lg:mx-auto">
 
                 <div className='w-full h-[300px] lg:h-[400px]'>
                   <Image
@@ -42,7 +42,7 @@ function Itinerary({data}:ItinirariesProps) {
                   </div>
                    
                   <p className='text-sm font-poppins lg:text-[18px] text-white '>{loc?.description}</p>
-                  <p className='text-[#c5e7c0] font-bowlby uppercase mt-2'>meals Included:{loc?.meal_included}</p>
+                  <p className='text-[#c5e7c0] font-bowlby uppercase mt-2'>meals Included:<span className='font-outfit font-light ml-3'>{loc?.meal_included}</span></p>
                 </section>
 
              </div>

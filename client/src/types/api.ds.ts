@@ -7,6 +7,13 @@ export type TourGuide = {
   location?:Location[]
 };
 
+
+export type KindWordProps = {
+  id: number;
+  name: string;
+  words: string;
+};
+
 export type Accommodation = {
   id:number;
   name:string;
@@ -54,8 +61,9 @@ export type Location = {
     duration_nights:number;
     short_description: string;
     place_name: string;
-    accommodations: Accommodation[];
     category: Category;
+    accommodations: Accommodation[];
+    kind_words: KindWordProps[];
     location: Location[];
   };
   
@@ -75,4 +83,8 @@ export type Location = {
 
  export type AccommodationProps = {
   data: Pick<ExperienceData, 'accommodations' >
+}
+
+export type AllKindWords = {
+  data: Pick<ExperienceData, 'kind_words' >
 }

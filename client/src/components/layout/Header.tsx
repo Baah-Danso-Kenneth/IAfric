@@ -59,9 +59,7 @@ export function Header() {
         };
     }, []);
 
-    useEffect(() => {
-        console.log('Available dropdowns:', Object.keys(dropDownContent));
-    }, []);
+
 
     const getDropdownItems = (name: DropdownName) => {
         if (!name) return [];

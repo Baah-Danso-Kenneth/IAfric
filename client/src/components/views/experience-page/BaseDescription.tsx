@@ -4,7 +4,6 @@ import Link from 'next/link'
 import React from 'react'
 
 function BaseDescription({data}:BaseDescriptionProps) {
-    console.log("checki",data);
   return (
     <div className='bg-[#c5e7c0] bg-texture'>
     <div className=' max-w-7xl mx-auto py-10 lg:py-20 bg-cover space-y-3 lg:space-y-10'>

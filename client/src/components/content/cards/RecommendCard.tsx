@@ -1,10 +1,11 @@
+import clsx from 'clsx';
 import React from 'react';
 
-function RecommendCard({ name, testimony }: { name: string; testimony: string }) {
+function RecommendCard({ name, testimony}: { name: string; testimony: string}) {
   return (
     <div className="w-[350px] h-auto relative flex flex-col">
   
-      <div className="bg-[#8338EC] p-6  flex-grow relative ">
+      <div className="bg-[#8338EC] p-6  flex-grow relative">
         <p className="text-sm text-white relative pl-3 pr-1">
           {testimony}
         </p>

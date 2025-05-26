@@ -67,6 +67,7 @@ class ExperienceAllInOneSerializer(serializers.ModelSerializer):
 
     category = ExperienceCategorySerializer( read_only=True)
     location = LocationSerializer(many=True)
+    accommodations = AccommodationSerializer(many=True, read_only=True)
 
     class Meta:
         model = Experience
@@ -80,6 +81,7 @@ class ExperienceAllInOneSerializer(serializers.ModelSerializer):
             "place_name",
             "description",
             "short_description",
+            "accommodations",
             "category",
             "location"
         ]

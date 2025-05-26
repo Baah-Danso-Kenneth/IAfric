@@ -12,7 +12,6 @@ import uuid
 
 
 class Accommodation(models.Model):
-    """Accommodation details for experiences (from first code)"""
     experience = models.ForeignKey(Experience, on_delete=models.CASCADE, related_name='accommodations')
     name = models.CharField(max_length=200, blank=True, null=True)
     description = models.TextField()
@@ -24,7 +23,6 @@ class Accommodation(models.Model):
 
 
 class IncludedItem(models.Model):
-    """Included items for experiences (from first code)"""
     experience = models.ForeignKey(Experience, on_delete=models.CASCADE, related_name='included_items')
     text = models.CharField(max_length=255)
 
@@ -33,7 +31,6 @@ class IncludedItem(models.Model):
 
 
 class NotIncludedItem(models.Model):
-    """Not included items for experiences (from first code)"""
     experience = models.ForeignKey(Experience, on_delete=models.CASCADE, related_name='not_included_items')
     text = models.CharField(max_length=255)
 
@@ -42,7 +39,6 @@ class NotIncludedItem(models.Model):
 
 
 class Recommendation(models.Model):
-    """Recommendations for experiences (from first code)"""
     experience = models.ForeignKey(Experience, on_delete=models.CASCADE, related_name='recommendations')
     person_name = models.CharField(max_length=100)
     message = models.TextField()
@@ -52,7 +48,6 @@ class Recommendation(models.Model):
 
 
 class HistoricalInfo(models.Model):
-    """Historical information for experiences (from first code)"""
     experience = models.ForeignKey(Experience, on_delete=models.CASCADE, related_name='histories')
     content = models.TextField()
 
@@ -61,7 +56,7 @@ class HistoricalInfo(models.Model):
 
 
 class MapAndContent(models.Model):
-    """Map and content details (from first code)"""
+
     experience = models.OneToOneField(Experience, on_delete=models.CASCADE, related_name='map_details', null=True)
     region_map = models.ImageField(upload_to='maps/', blank=True, null=True)
     best_time_title = models.CharField(max_length=30, blank=True, null=True)

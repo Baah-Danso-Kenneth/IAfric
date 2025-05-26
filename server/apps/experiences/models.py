@@ -202,7 +202,6 @@ class ExperienceSession(models.Model):
     # Tour guide assignment (optional override)
     guide = models.ForeignKey(TourGuide, on_delete=models.SET_NULL, null=True, blank=True)
 
-    # Override experience defaults if needed
     max_bookings = models.PositiveIntegerField(null=True, blank=True,
                                                help_text="Leave blank to use experience default")
     price_override_sats = models.PositiveIntegerField(null=True, blank=True,

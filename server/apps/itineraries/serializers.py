@@ -8,7 +8,7 @@ from apps.locations.models import TourGuide
 from apps.reviews.models import TripBatch
 
 class TourGuideSerializer(serializers.ModelSerializer):
-    """Serializer for tour guides"""
+
     experience_count = serializers.SerializerMethodField()
 
     class Meta:

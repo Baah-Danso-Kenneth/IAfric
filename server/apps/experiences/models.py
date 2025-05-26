@@ -10,15 +10,12 @@ from apps.lightningPayments.models import LightningPayment
 from apps.locations.models import Location, TourGuide
 import uuid
 
-
 class ExperienceCategory(models.Model):
-    """Categories for tourism experiences (e.g., Adventure, Cultural, Food Tours)"""
+
     name = models.CharField(max_length=255, unique=True)
     slug = models.SlugField(max_length=255, unique=True, blank=True)
     description = models.TextField(blank=True)
     image = models.ImageField(upload_to="experiences/categories/", blank=True, null=True)
-
-    # For filtering and display ordering
     order = models.PositiveIntegerField(default=0)
     is_featured = models.BooleanField(default=False)
 
@@ -43,9 +40,7 @@ class ExperienceCategory(models.Model):
     def __str__(self):
         return self.name
 
-
 class Experience(models.Model):
-    """Tourism experience/activity that can be booked"""
     DIFFICULTY_CHOICES = [
         ('easy', 'Easy - Suitable for all'),
         ('moderate', 'Moderate - Some physical activity'),
@@ -55,26 +50,17 @@ class Experience(models.Model):
 
     name = models.CharField(max_length=255)
     slug = models.SlugField(max_length=255, unique=True, blank=True)
-
-    # Basic details
     short_description = models.TextField(help_text="Brief summary for listings")
     description = models.TextField()
     category = models.ForeignKey(ExperienceCategory, on_delete=models.PROTECT,default=1)
     location = models.ManyToManyField(Location)
-    place_name = models.CharField(max_length=200, null=True, blank=True)  
-
-    # Key experience attributes
+    place_name = models.CharField(max_length=200, null=True, blank=True)
     duration_minutes = models.PositiveIntegerField(help_text="Duration in minutes")
-    # Keep original duration fields for backward compatibility
     duration_days = models.PositiveIntegerField(null=True, blank=True)  # From first code
     duration_nights = models.PositiveIntegerField(null=True, blank=True)  # From first code
-
     max_participants = models.PositiveIntegerField(default=10)
     min_participants = models.PositiveIntegerField(default=1)
     difficulty = models.CharField(max_length=12, choices=DIFFICULTY_CHOICES, default='easy')
-
-    # From first code: these are now handled by IncludedItem and NotIncludedItem models
-    # included_items = models.TextField(blank=True, help_text="What's included in the experience")
     what_to_bring = models.TextField(blank=True, help_text="What participants should bring")
 
     # Requirements and restrictions
@@ -190,8 +176,6 @@ class ExperienceImage(models.Model):
             ).exclude(pk=self.pk).update(is_primary=False)
         super().save(*args, **kwargs)
 
-
-
 class ExperienceSession(models.Model):
     """Sessions for experiences (e.g., specific dates/times)"""
     experience = models.ForeignKey(Experience, on_delete=models.CASCADE)
@@ -276,3 +260,16 @@ class ExperienceSession(models.Model):
         if self.price_override_currency is not None:
             return self.price_override_currency
         return self.experience.price_in_currency if self.experience else 0
+
+
+class KindWords(models.Model):
+    name = models.CharField(max_length=100, blank=True)
+    experience = models.ForeignKey(Experience,
+                                   on_delete=models.CASCADE,
+                                   blank=True, null=True,
+                                   related_name='kind_words'
+                                   )
+    words = models.TextField()
+
+    def __str__(self):
+        return f"${self.name}"

@@ -11,6 +11,7 @@ from apps.itineraries.serializers import *
 from apps.locations.serializers import *
 
 
+
 class ExperienceImageSerializer(serializers.ModelSerializer):
     """Serializer for experience images"""
 
@@ -19,7 +20,6 @@ class ExperienceImageSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'image', 'alt_text', 'order', 'is_primary'
         ]
-
 
 class ExperienceSessionSerializer(serializers.ModelSerializer):
     """Serializer for experience sessions"""
@@ -47,7 +47,6 @@ class ExperienceSessionSerializer(serializers.ModelSerializer):
             return obj.experience.duration_display
         return ""
 
-
 class ExperienceCategorySerializer(serializers.ModelSerializer):
     """Serializer for experience categories"""
 
@@ -60,14 +59,12 @@ class ExperienceCategorySerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ['slug', 'created_at', 'updated_at']
 
-
-
-
 class ExperienceAllInOneSerializer(serializers.ModelSerializer):
 
     category = ExperienceCategorySerializer( read_only=True)
     location = LocationSerializer(many=True)
     accommodations = AccommodationSerializer(many=True, read_only=True)
+    kind_words = KindWordSerializer(many=True, read_only=True)
 
     class Meta:
         model = Experience
@@ -82,6 +79,7 @@ class ExperienceAllInOneSerializer(serializers.ModelSerializer):
             "description",
             "short_description",
             "accommodations",
+            "kind_words",
             "category",
             "location"
         ]

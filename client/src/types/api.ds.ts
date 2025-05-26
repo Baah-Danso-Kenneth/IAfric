@@ -7,6 +7,14 @@ export type TourGuide = {
   location?:Location[]
 };
 
+export type Accommodation = {
+  id:number;
+  name:string;
+  description:string;
+  location:string;
+  image:string
+}
+
 
 export type Location = {
     id: number;
@@ -46,6 +54,7 @@ export type Location = {
     duration_nights:number;
     short_description: string;
     place_name: string;
+    accommodations: Accommodation[];
     category: Category;
     location: Location[];
   };
@@ -63,3 +72,7 @@ export type Location = {
  export type ItinirariesProps = {
     data: Pick<ExperienceData, 'name'|'location' >
  }
+
+ export type AccommodationProps = {
+  data: Pick<ExperienceData, 'accommodations' >
+}

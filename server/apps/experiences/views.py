@@ -7,6 +7,7 @@ class ExperienceDetailView(RetrieveAPIView):
         'experienceimage_set',
         'experiencesession_set',
         'location',
+        'kind_words',
     )
     serializer_class = ExperienceAllInOneSerializer
     lookup_field = 'slug'

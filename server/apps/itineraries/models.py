@@ -10,6 +10,8 @@ from apps.lightningPayments.models import LightningPayment
 from apps.experiences.models import Experience
 import uuid
 
+from apps.reviews.models import TripBatch
+
 
 class Accommodation(models.Model):
     experience = models.ForeignKey(Experience, on_delete=models.CASCADE, related_name='accommodations')
@@ -17,9 +19,28 @@ class Accommodation(models.Model):
     description = models.TextField()
     location = models.CharField(max_length=200, blank=True, null=True)
     image = models.ImageField(upload_to='accommodations/', null=True, blank=True)
+    total_rooms = models.PositiveIntegerField(default=0)
+    rooms_booked = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return self.name or f"Accommodation for {self.experience.name}"
+
+    @property
+    def room_left(self):
+        return max(self.total_rooms - self.rooms_booked,0)
+
+    @property
+    def can_book(self, requested_room):
+        return self.room_left >=requested_room
+
+    @property
+    def availability_status(self):
+        if self.room_left == 0:
+            return "Join wait list"
+        elif self.room_left <=3:
+            return f"Only {self.room_left} room(s) left"
+        else:
+            return "Book now"
 
 class IncludedItem(models.Model):
     experience = models.ForeignKey(Experience, on_delete=models.CASCADE, related_name='included_items')
@@ -81,3 +102,13 @@ class Itinerary(models.Model):
     def __str__(self):
         return f"{self.experience.name} - Day {self.day_number}: {self.title}"
 
+
+class WaitlistEntry(models.Model):
+    trip_batch = models.ForeignKey(TripBatch, on_delete=models.CASCADE, related_name='wait_list')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    contact_email = models.EmailField(blank=True)
+    contact_name = models.CharField(max_length=300)
+    joined_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ['trip_batch', 'user']

@@ -38,14 +38,14 @@ class IncludedItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = IncludedItem
-        fields = ['id', 'text']
+        fields = ['id', 'text', 'experience']
 
 class NotIncludedItemSerializer(serializers.ModelSerializer):
     """Serializer for not included items"""
 
     class Meta:
         model = NotIncludedItem
-        fields = ['id', 'text']
+        fields = ['id', 'text', 'experience']
 
 class RecommendationSerializer(serializers.ModelSerializer):
     """Serializer for recommendations"""

@@ -199,17 +199,24 @@ class Booking(models.Model):
         return payment
 
 
-@property
-def booked_item(self):
-    """Return the session or trip batch that was booked"""
-    return self.session or self.trip_batch
+    @property
+    def booked_item(self):
+        """Return the session or trip batch that was booked"""
+        return self.session or self.trip_batch
 
 
-@property
-def experience(self):
-    """Return the experience related to this booking"""
-    if self.session:
-        return self.session.experience
-    elif self.trip_batch:
-        return self.trip_batch.experience
-    return None
+    @property
+    def experience(self):
+        if self.session:
+            return self.session.experience
+        elif self.trip_batch:
+            return self.trip_batch.experience
+        return None
+
+    @property
+    def user_booking_status(self):
+        if not self.is_active:
+            return "closed"
+        if self.is_sold_out:
+            return "waitlist"
+        return "book"

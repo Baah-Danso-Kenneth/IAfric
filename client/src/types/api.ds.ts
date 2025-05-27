@@ -1,3 +1,23 @@
+
+export type IncludedItem = {
+  id: number;
+  text: string;
+};
+
+export type NotIncludedItem = {
+  id: number;
+  text: string;
+};
+
+export type MapContentTypes = {
+  id:number;
+  region_map:string;
+  best_time_title:string;
+  best_time_des:string;
+  weather_title:string;
+  weather_time_des:string;
+}
+
 export type TourGuide = {
   id: number;
   name: string;
@@ -7,6 +27,15 @@ export type TourGuide = {
   location?:Location[]
 };
 
+export type IncludedItems={
+id:number;
+text:string;
+}
+
+export type UnIncludedItems={
+  id:number;
+  text:string;
+}
 
 export type KindWordProps = {
   id: number;
@@ -62,9 +91,12 @@ export type Location = {
     short_description: string;
     place_name: string;
     category: Category;
+    map_details:MapContentTypes,
     accommodations: Accommodation[];
     kind_words: KindWordProps[];
     location: Location[];
+    included_items: IncludedItem[];
+    not_included_items: NotIncludedItem[];
   };
   
 
@@ -87,4 +119,14 @@ export type Location = {
 
 export type AllKindWords = {
   data: Pick<ExperienceData, 'kind_words' >
+}
+
+
+
+export type WhatIncludedProps = {
+  data: ExperienceData;
+}
+
+export type BlendMapTypes = {
+  data: Pick<ExperienceData, 'map_details'>
 }

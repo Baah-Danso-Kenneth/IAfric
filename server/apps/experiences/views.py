@@ -8,6 +8,9 @@ class ExperienceDetailView(RetrieveAPIView):
         'experiencesession_set',
         'location',
         'kind_words',
+        'included_items',
+        'map_details',
+        'not_included_items'
     )
     serializer_class = ExperienceAllInOneSerializer
     lookup_field = 'slug'

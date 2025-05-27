@@ -10,6 +10,7 @@ from apps.itineraries.serializers import *
 from apps.itineraries.serializers import *
 from apps.locations.serializers import *
 
+from ..itineraries.serializers import MapAndContentSerializer
 
 
 class ExperienceImageSerializer(serializers.ModelSerializer):
@@ -65,6 +66,9 @@ class ExperienceAllInOneSerializer(serializers.ModelSerializer):
     location = LocationSerializer(many=True)
     accommodations = AccommodationSerializer(many=True, read_only=True)
     kind_words = KindWordSerializer(many=True, read_only=True)
+    not_included_items = NotIncludedItemSerializer(many=True, read_only=True)
+    included_items = IncludedItemSerializer(many=True, read_only=True)
+    map_details = MapAndContentSerializer(read_only=True)
 
     class Meta:
         model = Experience
@@ -77,6 +81,9 @@ class ExperienceAllInOneSerializer(serializers.ModelSerializer):
             "duration_nights",
             "place_name",
             "description",
+            "not_included_items",
+            "map_details",
+            "included_items",
             "short_description",
             "accommodations",
             "kind_words",

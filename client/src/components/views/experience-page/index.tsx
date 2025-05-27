@@ -11,8 +11,12 @@ import BaseDescription from './BaseDescription';
 import Itinerary from './Itinerary';
 import TourGuides from './TourGuides';
 import Accomodation from './Accomodation';
-import WhatIncluded from './WhatIncluded';
 import DestinationKindWord from './DestinationKindWord';
+import WhatIncluded from './WhatIncluded';
+import BookTripComponent from './BookTripComponent';
+import MapandText from './MapandText';
+
+
 
 function ExperiencePage({slug}: ExperiencePageProps) {
     const {data, isLoading} = useGetExperienceQuery(slug);
@@ -24,11 +28,13 @@ function ExperiencePage({slug}: ExperiencePageProps) {
         <Header/>
             <HeroSection data={data}/>
             <BaseDescription data={data}/>
+            <BookTripComponent data={data}/>
             <Itinerary data={data}/>
             <TourGuides data={data}/>
             <Accomodation data={data}/>
             <DestinationKindWord data={data}/>
-            <WhatIncluded/>
+            <WhatIncluded data={data}/>
+            <MapandText data={data}/>
         <Footer/>
     </React.Fragment>
   )

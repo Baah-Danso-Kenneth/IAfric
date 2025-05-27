@@ -6,7 +6,7 @@ function RecommendCard({ name, testimony}: { name: string; testimony: string}) {
     <div className="w-[350px] h-auto relative flex flex-col">
   
       <div className="bg-[#8338EC] p-6  flex-grow relative">
-        <p className="text-sm text-white relative pl-3 pr-1">
+        <p className="text-sm text-white relative pl-3 pr-1 lg:text-[18px]">
           {testimony}
         </p>
         

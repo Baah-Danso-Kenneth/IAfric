@@ -5,7 +5,7 @@ import React from 'react'
 
 function BaseDescription({data}:BaseDescriptionProps) {
   return (
-    <div className='bg-[#c5e7c0] bg-texture'>
+    <div className='bg-white bg-texture'>
     <div className=' max-w-7xl mx-auto py-10 lg:py-20 bg-cover space-y-3 lg:space-y-10'>
             <div className='flex items-center justify-center'>
                 <h1 className='text-[20px] text-wrap md:text-4xl lg:text-6xl uppercase text-[#8338EC] font-outfit'>litrafric X {data?.name}</h1>

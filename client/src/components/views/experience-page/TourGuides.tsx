@@ -25,10 +25,10 @@ function TourGuides({ data }: ItinirariesProps) {
           {allGuides?.map(({ id, name, image, locationName },index) => (
             <div
               key={index+1}
-              className="flex flex-col items-center text-center space-y-2 bg-white rounded-xl shadow-lg p-4"
+              className="flex flex-col items-center text-center space-y-2 bg-texture bg-white rounded-xl shadow-lg p-4"
             >
           
-              <div className="w-32 h-32 md:w-28 md:h-28 lg:w-32 lg:h-32 rounded-full overflow-hidden border-2 border-white shadow-md">
+              <div className="w-32 h-32 md:w-28 md:h-28 lg:w-32 lg:h-32 rounded-full overflow-hidden border-2  border-white shadow-md">
                 <Image
                   src={image}
                   alt={name}

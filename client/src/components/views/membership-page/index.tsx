@@ -1,24 +1,15 @@
-import React from 'react'
 import Footer from '@/components/layout/Footer'
 import { Header } from '@/components/layout/Header'
-import HeroSection from './HeroSection'
-import TeamRole from './TeamRole'
-import Description from './Description'
-import Subscription from '@/components/content/common/SubScription'
-import VariousTrips from './VariousTrips'
+import React from 'react'
 
-function MeetClique() {
+function MemberShipPage() {
   return (
     <React.Fragment>
-      <Header/>
-      <HeroSection/>
-      <TeamRole/>
-      <Description/>
-      <VariousTrips/>
-      <Subscription/>
-      <Footer />
-      </React.Fragment>
+        <Header/>
+          membership
+        <Footer/>
+        </React.Fragment>
   )
 }
 
-export default MeetClique
+export default MemberShipPage

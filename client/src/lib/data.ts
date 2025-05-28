@@ -7,7 +7,7 @@ export const navLinks=[
     {name:'destination',href:'/destination'},
     {name:'customize',href:'/customize'},
     {name:'shop', href:'/shop'},
-    {name:'membership',href:'/memebership'},
+    {name:'membership',href:'/membership'},
     {name:'about',href:'/about'}
 ]
 
@@ -127,6 +127,15 @@ export const retro=[
 ]
 
 
+export const directionLinks=[
+  {name:'trip dates', path:'#'},
+  {name:'the itinerary', path:'#'},
+  {name:'accomodations', path:'#'},
+  {name:'what is included', path:'#'},
+  {name:'trip leaders', path:'#'},
+  {name:'faqs', path:'#'}
+]
+
 export const ourStyleData=[
   {title:'small groups',
      description:'We really hate shouting across the dinner table, so we cap our group size at 10-12 women per trip. No ifs, ands, or buts about it.',
@@ -151,16 +160,16 @@ export const sponsorData = [
 ]
 
 export const subMenus: SubMenusType = {
-  'all experience': [
-    { name: 'what we do', href: '/experience/what-we-do' },
-    { name: 'customer service', href: '/experience/customer-service' },
-    { name: 'our routine', href: '/experience/our-routine' },
-    { name: 'testimonies', href: '/experience/testimonies' }
+  'destination': [
+    { name: 'Ghana', href: '/experience/what-we-do' },
+    { name: 'Zimbabwe ', href: '/experience/customer-service' },
+    { name: 'Egypt', href: '/experience/our-routine' },
+    { name: 'Mali', href: '/experience/testimonies' }
   ],
   'about': [
-    { name: 'our team', href: '/about/team' },
+    { name: 'our team', href: '/about/meetTeam/' },
     { name: 'our history', href: '/about/history' },
-    { name: 'our mission', href: '/about/mission' }
+    { name: 'our mission', href: '/about/ourMission' }
   ]
 };
 

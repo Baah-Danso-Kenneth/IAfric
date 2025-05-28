@@ -15,7 +15,7 @@ function MenuPopUp({ onClose, isOpen = true }: MenuPopUpProps) {
   const [activeSubmenu, setActiveSubmenu] = useState<string | null>(null);
   const [isAnimating, setIsAnimating] = useState<boolean>(false);
   
-  // Reset state when menu closes
+
   useEffect(() => {
     if (!isOpen) {
       setTimeout(() => {
@@ -38,14 +38,14 @@ function MenuPopUp({ onClose, isOpen = true }: MenuPopUpProps) {
     setTimeout(() => {
       setActiveSubmenu(null);
       setIsAnimating(false);
-    }, 300); // Match this with CSS transition time
+    }, 300); 
   };
 
 
   if (isOpen === false) return null;
 
   return (
-    <div className="lg:hidden fixed inset-0 w-full bg-[#8338EC] p-5 h-full z-50 flex items-center justify-center">
+    <div className="lg:hidden fixed inset-0 w-full bg-[#8338EC]  h-full z-50 flex items-center justify-center">
       <div className="relative w-full max-w-md h-3/4 overflow-hidden">
 
         <div 

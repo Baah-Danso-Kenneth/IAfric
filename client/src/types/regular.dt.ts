@@ -91,3 +91,13 @@ export type Carousel={
 export interface TextCarouselProps {
   carousels: Carousel[];
 }
+
+export type PageProps = {
+  params: {
+    slug:string;
+  }
+}
+
+export type ExperiencePageProps = {
+  slug: string;
+};

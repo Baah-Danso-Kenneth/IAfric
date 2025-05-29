@@ -49,8 +49,6 @@ class ExperienceSessionSerializer(serializers.ModelSerializer):
         return ""
 
 class ExperienceCategorySerializer(serializers.ModelSerializer):
-    """Serializer for experience categories"""
-
     class Meta:
         model = ExperienceCategory
         fields = [

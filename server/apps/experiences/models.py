@@ -47,7 +47,7 @@ class Experience(models.Model):
         ('challenging', 'Challenging - Requires good fitness'),
         ('expert', 'Expert - Advanced skills required')
     ]
-
+        
     name = models.CharField(max_length=255)
     slug = models.SlugField(max_length=255, unique=True, blank=True)
     short_description = models.TextField(help_text="Brief summary for listings")

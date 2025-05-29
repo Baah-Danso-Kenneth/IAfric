@@ -1,3 +1,4 @@
+import { ExperienceData } from '@/types/api.ds';
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
 
 export const allExperienceApi = createApi({

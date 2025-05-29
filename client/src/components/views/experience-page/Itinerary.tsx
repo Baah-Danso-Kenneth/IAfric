@@ -20,6 +20,8 @@ function Itinerary({data}:ItinirariesProps) {
             <div key={index} className="mx-10 grid grid-cols-1 xl:grid-cols-2 gap-8 max-w-6xl items-start lg:mx-auto">
 
                 <div className='w-full h-[300px] lg:h-[400px]'>
+
+                  {loc.image && (
                   <Image
                     src={loc.image}
                     alt={loc.name}
@@ -27,6 +29,8 @@ function Itinerary({data}:ItinirariesProps) {
                     height={400}
                     className='w-full h-full object-cover'
                   />
+                  ) }
+
                 </div>
 
                 <section>

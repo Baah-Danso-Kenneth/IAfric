@@ -29,13 +29,16 @@ function TourGuides({ data }: ItinirariesProps) {
             >
           
               <div className="w-32 h-32 md:w-28 md:h-28 lg:w-32 lg:h-32 rounded-full overflow-hidden border-2  border-white shadow-md">
-                <Image
+                {image && (
+                    <Image
                   src={image}
                   alt={name}
                   width={128}
                   height={128}
                   className="object-cover w-full h-full"
                 />
+                )}
+
               </div>
 
               {/* Name */}

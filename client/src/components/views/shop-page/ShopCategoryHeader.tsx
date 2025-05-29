@@ -11,7 +11,7 @@ function ShopCategoryHeader({ selected, setSelected, categories }: ShopCategoryH
     <div className="flex flex-wrap justify-center gap-3 mb-8">
       <Button
         onClick={() => setSelected(undefined)}
-        className={`border px-4 py-2 rounded-lg uppercase ${!selected ? 'bg-black text-white' : 'bg-white text-black'}`}
+        className={`border border-black  px-4 py-2 text-sm rounded-lg uppercase hover:bg-electricPurple hover:text-white ${!selected ? 'bg-electricPurple text-white' : 'bg-transparent text-black'}`}
       >
         All
       </Button>
@@ -20,8 +20,8 @@ function ShopCategoryHeader({ selected, setSelected, categories }: ShopCategoryH
         <Button
           key={cat.slug}
           onClick={() => setSelected(cat.slug)}
-          className={`border px-4 py-2 rounded-lg uppercase ${
-            selected === cat.slug ? 'bg-black text-white' : 'bg-white text-black'
+          className={`border border-black px-4 py-2 text-sm rounded-lg uppercase hover:bg-electricPurple hover:text-white ${
+            selected === cat.slug ? 'bg-electricPurple text-white' : 'bg-transparent text-black'
           }`}
         >
           {cat.name}

@@ -16,6 +16,9 @@ function ShopScreen() {
 
   return (
     <div className="min-h-screen bg-limeGreen bg-texture px-6 py-10">
+     <div className='flex items-center justify-center py-10'>
+        <h1 className='text-2xl md:text-3xl text-center lg:text-5xl uppercase text-electricPurple'>shops</h1>
+     </div>
 
       {categories && (
         <ShopCategoryHeader

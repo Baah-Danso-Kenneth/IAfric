@@ -13,15 +13,8 @@ class ProductCategory(models.Model):
     name = models.CharField(max_length=255, unique=True)
     slug = models.SlugField(max_length=255, unique=True, blank=True)
     description = models.TextField(blank=True)
-
-    # Add image field for category representation
-    image = models.ImageField(upload_to="shop/categories/", blank=True, null=True)
-
-    # Add for SEO optimization
     meta_title = models.CharField(max_length=255, blank=True)
     meta_description = models.TextField(blank=True)
-
-    # Track creation and updates
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -51,7 +44,6 @@ class Product(models.Model):
     description = models.TextField()
     short_description = models.TextField(blank=True, help_text="Brief product summary for listings")
 
-    # Price fields with appropriate validators
     price_in_sats = models.PositiveIntegerField(validators=[MinValueValidator(1)])
     price_in_fiat = models.DecimalField(
         max_digits=10,
@@ -61,13 +53,11 @@ class Product(models.Model):
         help_text="Optional fiat price equivalent"
     )
 
-    # Inventory management
     stock_quantity = models.PositiveIntegerField(default=3)
     sku = models.CharField(max_length=100, unique=True, blank=True, null=True)
     track_inventory = models.BooleanField(default=True)
     low_stock_threshold = models.PositiveIntegerField(default=5)
 
-    # Status fields
     is_active = models.BooleanField(default=True)
     is_featured = models.BooleanField(default=False)
 
@@ -116,7 +106,8 @@ class ProductImage(models.Model):
         on_delete=models.CASCADE,
         related_name='images'
     )
-    image = models.ImageField(upload_to="shop/products/")
+    front_image = models.ImageField(upload_to="shop/products/", blank=True)
+    back_image = models.ImageField(upload_to="shop/products/", blank=True)
     alt_text = models.CharField(max_length=255, blank=True)
     order = models.PositiveIntegerField(default=0)
     is_primary = models.BooleanField(default=False)
@@ -124,7 +115,6 @@ class ProductImage(models.Model):
     class Meta:
         ordering = ['order']
         constraints = [
-            # Ensure only one primary image per product
             models.UniqueConstraint(
                 fields=['product'],
                 condition=models.Q(is_primary=True),
@@ -146,7 +136,6 @@ class ProductImage(models.Model):
 
 
 class ProductVariant(models.Model):
-    """Optional model for products with variants like size, color, etc."""
     product = models.ForeignKey(
         Product,
         on_delete=models.CASCADE,

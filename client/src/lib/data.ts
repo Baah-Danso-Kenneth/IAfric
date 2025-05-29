@@ -175,15 +175,17 @@ export const subMenus: SubMenusType = {
 
 export const dropDownContent={
    'destination':[
-    {name:'ghana', href:'#'},
-    {name:'nigeria', href:'#'},
-    {name:'Tanzania', href:'#'},
-    {name:'zimbabue', href:'#'},
-    {name:'ghigana', href:'#'},
-    {name:'ghana', href:'#'},
-    {name:'ssssssssssssss', href:'#'},
-    {name:'ghana', href:'#'},
-    {name:'ghana', href:'#'},
+     {name:'Tanzania', href:'/experience/tanzania'},
+     {name:'ghana', href:'/experience/ghana'},
+    {name:'egypt', href:'/experience/egypt'},
+    {name:'nigeria', href:'/experience/nigeria'},
+    {name:'zimbabwe', href:'/experience/zimbabwe'},
+    {name:'namibia', href:'/experience/namibia'},
+    {name:'botswana', href:'/experience/botswana'},
+    {name:'south africa', href:'/experience/egypt'},
+    {name:'kenya', href:'/experience/kenya'},
+    {name:'morocco', href:'/experience/morocco'},
+
    ],
 
    'about':[

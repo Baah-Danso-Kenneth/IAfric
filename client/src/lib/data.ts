@@ -159,6 +159,19 @@ export const sponsorData = [
 
 ]
 
+  export const perksList = [
+    { text: "10 fun virtual gatherings throughout the year", value: "$600 value" },
+    { text: "Early access to new destinations…ahem, Japan!", value: "~$450 value" },
+    { text: "10% discount on last-minute group trips", value: "~$800 value" },
+    { text: "Priority on group trip waitlists", value: "" },
+    { text: "10% off Detours", value: "~$100 value" },
+    { text: "10% off the Shop", value: "~$50 value" },
+    { text: "Free access to all Wild Terrains city travel guides", value: "~$200 value" },
+    { text: "Wing Woman members-only community", value: "priceless!" },
+    { text: "Proceeds of your membership fund an annual travel scholarship for BIPOC women", value: "" },
+    { text: "+ surprises along the way!", value: "" }
+  ];
+
 export const subMenus: SubMenusType = {
   'destination': [
     { name: 'Ghana', href: '/experience/what-we-do' },
@@ -355,3 +368,27 @@ export const popularSites=[
   {image:'/images/hero-img.jpg'},
   {image:'/images/hero-img.jpg'},
 ]
+
+
+  export const images = [
+    {
+      src: "/images/cantropae.jpg",
+      alt: "Travel experience 1",
+      rotation: "-rotate-12"
+    },
+    {
+      src: "/images/afr.png", 
+      alt: "Travel experience 2",
+      rotation: "rotate-6"
+    },
+    {
+      src: "/images/cubes.jpeg",
+      alt: "Travel experience 3", 
+      rotation: "-rotate-6"
+    },
+    {
+      src: "/images/hero-img.jpg",
+      alt: "Travel experience 4",
+      rotation: "rotate-12"
+    }
+  ];

@@ -13,7 +13,7 @@ import { MdKeyboardDoubleArrowRight } from "react-icons/md";
 
 function MenuPopUp({ onClose, isOpen = true }: MenuPopUpProps) {
   const [activeSubmenu, setActiveSubmenu] = useState<string | null>(null);
-  const [isAnimating, setIsAnimating] = useState<boolean>(false);
+  const [, setIsAnimating] = useState<boolean>(false);
   
 
   useEffect(() => {
@@ -25,13 +25,13 @@ function MenuPopUp({ onClose, isOpen = true }: MenuPopUpProps) {
     }
   }, [isOpen]);
 
-  const handleNavItemClick = (sectionName: string) => {
-    if (subMenus[sectionName]) {
-      setIsAnimating(true);
-      setActiveSubmenu(sectionName);
-      setTimeout(() => setIsAnimating(false), 300); 
-    }
-  };
+const handleNavItemClick = (sectionName: string) => {
+  if (subMenus[sectionName.trim().toLowerCase()]) {
+    setIsAnimating(true);
+    setActiveSubmenu(sectionName.trim().toLowerCase());
+    setTimeout(() => setIsAnimating(false), 300); 
+  }
+};
 
   const handleBackClick = () => {
     setIsAnimating(true);
@@ -55,7 +55,7 @@ function MenuPopUp({ onClose, isOpen = true }: MenuPopUpProps) {
         >
           {navLinks.map((section, index) => (
             <div key={index} className="w-full max-w-xs ">
-              {subMenus[section.name] ? (
+              {subMenus[section.name.trim().toLowerCase()] ? (
                 <button 
                   onClick={() => handleNavItemClick(section.name)}
                   className="flex items-center gap-10 w-full text-xl font-medium text-white py-3 px-4 rounded-lg hover:bg-purple-700 transition-colors"

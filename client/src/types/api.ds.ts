@@ -105,7 +105,11 @@ export type Location = {
   }
 
   export type BaseDescriptionProps = {
-    data: Pick<ExperienceData,'name'|'description'|'short_description'|'duration_days'|'duration_nights'>
+    data: Pick<ExperienceData,
+    'name'|'description'|'short_description'|
+    'duration_days'|'duration_nights'|'id' | 
+    'slug'|'main_image'|'place_name'|'category'
+    >
  }
 
 

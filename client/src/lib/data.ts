@@ -159,18 +159,18 @@ export const sponsorData = [
 
 ]
 
-  export const perksList = [
-    { text: "10 fun virtual gatherings throughout the year", value: "$600 value" },
-    { text: "Early access to new destinations…ahem, Japan!", value: "~$450 value" },
-    { text: "10% discount on last-minute group trips", value: "~$800 value" },
-    { text: "Priority on group trip waitlists", value: "" },
-    { text: "10% off Detours", value: "~$100 value" },
-    { text: "10% off the Shop", value: "~$50 value" },
-    { text: "Free access to all Wild Terrains city travel guides", value: "~$200 value" },
-    { text: "Wing Woman members-only community", value: "priceless!" },
-    { text: "Proceeds of your membership fund an annual travel scholarship for BIPOC women", value: "" },
-    { text: "+ surprises along the way!", value: "" }
-  ];
+export const perksList = [
+  { text: "10 unforgettable virtual meetups with Litrafric explorers worldwide", value: "~90,000 sats value" },
+  { text: "First dibs on new African destinations – yes, even hidden gems in Ghana & Rwanda!", value: "~67,500 sats value" },
+  { text: "10% off spontaneous trips across Africa – from safaris to city escapes", value: "~120,000 sats value" },
+  { text: "Skip the line with priority access on fully booked African group trips", value: "" },
+  { text: "10% discount on Detour experiences across the continent", value: "~15,000 sats value" },
+  { text: "10% off all Litrafric merch & marketplace goodies", value: "~7,500 sats value" },
+  { text: "Free lifetime access to our curated city travel guides – Lagos, Accra, Nairobi, Cape Town & more", value: "~30,000 sats value" },
+  { text: "Exclusive access to the Wing Woman global sisterhood – made for travelers like you", value: "priceless!" },
+  { text: "Every membership funds travel scholarships for BIPOC women exploring Africa", value: "" },
+  { text: "+ expect surprise Litrafric drops & bonuses along your journey!", value: "" }
+];
 
 export const subMenus: SubMenusType = {
   'destination': [

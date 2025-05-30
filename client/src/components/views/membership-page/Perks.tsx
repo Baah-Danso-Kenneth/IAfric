@@ -16,10 +16,11 @@ function Perks() {
             </h1>
           </div>
 
-   
-          <div className='grid grid-cols-1 xl:grid-cols-2 gap-8 lg:gap-12 items-center'>
+          {/* Grid with items-start to align both sections at the top */}
+          <div className='grid grid-cols-1 xl:grid-cols-2 gap-8 lg:gap-12 items-start'>
  
-            <div className='relative w-full h-[400px] lg:h-[500px] xl:h-[600px]  overflow-hidden'>
+            {/* Image Section - aligned to start from top */}
+            <div className='relative w-full h-[400px] lg:h-[500px] xl:h-[600px] overflow-hidden'>
               <Image 
                 src="/images/afr.png" 
                 alt="perks"
@@ -29,15 +30,17 @@ function Perks() {
               />
             </div>
 
+            {/* Text Content Section - also starts from top */}
             <div className='space-y-6 lg:space-y-8'>
               
+              {/* Membership Title */}
               <div className='text-center xl:text-left'>
-                <h2 className='text-sm w-full lg:w-[40%]  md:text-[18px] lg:text-[20px] uppercase text-limeGreen font-bold'>
+                <h2 className='text-sm w-full lg:w-[40%] md:text-[18px] lg:text-[20px] uppercase text-limeGreen font-bold'>
                   Annual Membership 50000 sats/year
                 </h2>
               </div>
 
-        
+              {/* Perks List */}
               <div className='space-y-4'>
                 {perksList.map((perk, index) => (
                   <div key={index} className='flex items-start space-x-3 text-white'>
@@ -58,7 +61,7 @@ function Perks() {
 
               {/* CTA Button */}
               <div className='pt-6 text-center xl:text-left'>
-                <Button className='bg-limeGreen hover:bg-limeGreen/90  text-electricPurple px-8 py-4 lg:py-6 text-lg uppercase font-bold rounded-lg transition-all duration-300 hover:scale-105 shadow-lg'>
+                <Button className='bg-limeGreen hover:bg-limeGreen/90 text-electricPurple px-8 py-4 lg:py-6 text-lg uppercase font-bold rounded-lg transition-all duration-300 hover:scale-105 shadow-lg'>
                   OMG Sign Me Up
                 </Button>
               </div>

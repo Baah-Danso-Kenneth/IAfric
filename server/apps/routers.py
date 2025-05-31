@@ -3,13 +3,14 @@ from django.urls import path
 from apps.experiences.views import (
     ExperienceDetailView
 )
+from apps.lightningPayments.viewsets import LightningPaymentViewSet
 from apps.shops.views import (
     ShopProductListView, ProductCategoryListView
 )
 
 
 router = routers.SimpleRouter()
-
+router.register(r'payments', LightningPaymentViewSet)
 
 urlpatterns=[
     *router.urls,

@@ -2,7 +2,7 @@ import React from 'react';
 
 function CircularText() {
   return (
-    <div className="relative w-64 h-64">
+    <div className="relative w-64 h-64 invert">
       {/* SVG for circular text */}
       <svg 
         viewBox="0 0 100 100" 

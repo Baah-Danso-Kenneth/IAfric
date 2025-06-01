@@ -23,7 +23,6 @@ class LightningPaymentViewSet(viewsets.ModelViewSet):
             return Response({'error': 'Invalid amount'}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            # Handle cart or item payment
             cart, paid_item = self._get_payment_target(data)
 
             payment = LightningPayment.create_invoice(

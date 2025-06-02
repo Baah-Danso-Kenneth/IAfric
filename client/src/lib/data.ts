@@ -159,6 +159,19 @@ export const sponsorData = [
 
 ]
 
+export const perksList = [
+  { text: "10 unforgettable virtual meetups with Litrafric explorers worldwide", value: "~90,000 sats value" },
+  { text: "First dibs on new African destinations – yes, even hidden gems in Ghana & Rwanda!", value: "~67,500 sats value" },
+  { text: "10% off spontaneous trips across Africa – from safaris to city escapes", value: "~120,000 sats value" },
+  { text: "Skip the line with priority access on fully booked African group trips", value: "" },
+  { text: "10% discount on Detour experiences across the continent", value: "~15,000 sats value" },
+  { text: "10% off all Litrafric merch & marketplace goodies", value: "~7,500 sats value" },
+  { text: "Free lifetime access to our curated city travel guides – Lagos, Accra, Nairobi, Cape Town & more", value: "~30,000 sats value" },
+  { text: "Exclusive access to the Wing Woman global sisterhood – made for travelers like you", value: "priceless!" },
+  { text: "Every membership funds travel scholarships for BIPOC women exploring Africa", value: "" },
+  { text: "+ expect surprise Litrafric drops & bonuses along your journey!", value: "" }
+];
+
 export const subMenus: SubMenusType = {
   'destination': [
     { name: 'Ghana', href: '/experience/what-we-do' },
@@ -175,15 +188,17 @@ export const subMenus: SubMenusType = {
 
 export const dropDownContent={
    'destination':[
-    {name:'ghana', href:'#'},
-    {name:'nigeria', href:'#'},
-    {name:'Tanzania', href:'#'},
-    {name:'zimbabue', href:'#'},
-    {name:'ghigana', href:'#'},
-    {name:'ghana', href:'#'},
-    {name:'ssssssssssssss', href:'#'},
-    {name:'ghana', href:'#'},
-    {name:'ghana', href:'#'},
+     {name:'Tanzania', href:'/experience/tanzania'},
+     {name:'ghana', href:'/experience/ghana'},
+    {name:'egypt', href:'/experience/egypt'},
+    {name:'nigeria', href:'/experience/nigeria'},
+    {name:'zimbabwe', href:'/experience/zimbabwe'},
+    {name:'namibia', href:'/experience/namibia'},
+    {name:'botswana', href:'/experience/botswana'},
+    {name:'south africa', href:'/experience/egypt'},
+    {name:'kenya', href:'/experience/kenya'},
+    {name:'morocco', href:'/experience/morocco'},
+
    ],
 
    'about':[
@@ -353,3 +368,27 @@ export const popularSites=[
   {image:'/images/hero-img.jpg'},
   {image:'/images/hero-img.jpg'},
 ]
+
+
+  export const images = [
+    {
+      src: "/images/cantropae.jpg",
+      alt: "Travel experience 1",
+      rotation: "-rotate-12"
+    },
+    {
+      src: "/images/afr.png", 
+      alt: "Travel experience 2",
+      rotation: "rotate-6"
+    },
+    {
+      src: "/images/cubes.jpeg",
+      alt: "Travel experience 3", 
+      rotation: "-rotate-6"
+    },
+    {
+      src: "/images/hero-img.jpg",
+      alt: "Travel experience 4",
+      rotation: "rotate-12"
+    }
+  ];

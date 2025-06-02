@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button'
 import { BaseDescriptionProps } from '@/types/api.ds'
+import Link from 'next/link'
 import React from 'react'
 
 function BookTripComponent({data}:BaseDescriptionProps) {
@@ -16,7 +17,9 @@ function BookTripComponent({data}:BaseDescriptionProps) {
               </div>
 
               <div className='flex items-center justify-center'>
-                  <Button className='px-5 py-3 bg-electricPurple text-[18px] uppercase'>Book now</Button>
+                 <Link href={`/book-experience/${data?.slug}`}>
+                   <Button className='px-5 py-3 bg-electricPurple text-[18px] uppercase'>Book now</Button>
+                 </Link>
               </div>
         </div>
         

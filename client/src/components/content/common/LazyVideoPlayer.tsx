@@ -3,23 +3,34 @@
 import React, { useEffect, useRef, useState } from 'react'
 
 interface LazyVideoPlayerProps {
-  youtubeID: string;
+  videoSrc?: string; // Made optional with default
 }
 
-function LazyVideoPlayer({ youtubeID }: LazyVideoPlayerProps) {
+function LazyVideoPlayer({ videoSrc = "/video/litra-video.mp4" }: LazyVideoPlayerProps) {
   const [isInView, setIsInView] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
   
   useEffect(() => {
     const currentContainerRef = containerRef.current;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsInView(true);
+        setIsInView(entry.isIntersecting);
+        
+        // Control video playback based on visibility
+        if (videoRef.current) {
+          if (entry.isIntersecting) {
+            videoRef.current.play().catch(console.error);
+          } else {
+            videoRef.current.pause();
+          }
         }
       }, 
-      { threshold: 0, rootMargin: "200px" } // Reduced from 1500px for better performance
+      { 
+        threshold: 0.3, // Play when 30% of video is visible
+        rootMargin: "50px" 
+      }
     );
 
     if (currentContainerRef) {
@@ -31,17 +42,28 @@ function LazyVideoPlayer({ youtubeID }: LazyVideoPlayerProps) {
         observer.unobserve(currentContainerRef);
       }
     }
-  }, []); // Added missing dependency array
+  }, []);
+
+  // Handle video loaded event
+  const handleVideoLoaded = () => {
+    if (videoRef.current && isInView) {
+      videoRef.current.play().catch(console.error);
+    }
+  };
 
   return (
     <div ref={containerRef} className="relative h-full w-full">
       {isInView ? (
-        <iframe
-          src={`https://www.youtube-nocookie.com/embed/${youtubeID}?autoplay=1&mute=1&loop=1&playlist=${youtubeID}`}
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-          className="h-full w-full border-0"
-          title="Video player"
+        <video
+          ref={videoRef}
+          src={videoSrc}
+          className="h-full w-full object-cover"
+          autoPlay
+          muted
+          loop
+          playsInline
+          onLoadedData={handleVideoLoaded}
+          onError={(e) => console.error('Video loading error:', e)}
         />
       ) : (
         <div className="h-full w-full bg-gray-200 flex items-center justify-center">

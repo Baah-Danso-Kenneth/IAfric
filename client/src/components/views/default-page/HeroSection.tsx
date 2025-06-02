@@ -2,8 +2,6 @@ import LazyVideoPlayer from '@/components/content/common/LazyVideoPlayer';
 import clsx from 'clsx'
 import Image from 'next/image'
 
-const youtubeID='44I29krtxa'
-
 const MASK_CLASSES =
   "[mask-image:url(/images/video-mask.png)] [mask-mode:alpha] [mask-position:center_center] [mask-repeat:no-repeat] [mask-size:80%_auto]";
 
@@ -27,7 +25,6 @@ export function HeroSection() {
   )}
 />
 
-
         <div
           className={clsx(
             MASK_CLASSES,
@@ -35,7 +32,7 @@ export function HeroSection() {
           )}
         />
            <div className={clsx(MASK_CLASSES,"relative h-full ")}>
-            <LazyVideoPlayer youtubeID={youtubeID} />
+            <LazyVideoPlayer videoSrc="/video/litra-video.mp4" />
             <Image src="/images/image-texture.png" alt="" fill className="pointer-events-none object-cover opacity-50"/>
            </div>
         </div>

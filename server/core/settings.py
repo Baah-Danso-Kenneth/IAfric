@@ -152,3 +152,35 @@ CORS_ALLOWED_ORIGINS = [
     "https://sub.example.com",
     "http://localhost:3000",
 ]
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': 'lightning_payments.log',
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'apps.lightningPayments': {
+            'handlers': ['file', 'console'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+    },
+}
+
+# Lightning Payment Settings
+LIGHTNING_INVOICE_EXPIRY_MINUTES = 60
+LIGHTNING_PAYMENT_TIMEOUT_SECONDS = 30
+
+LNDBITS_URL = config('LNDBITS_URL', default='')
+LNDBITS_ADMIN_KEY = config('LNDBITS_ADMIN_KEY', default='')
+LNDBITS_INVOICE_KEY = config('LNDBITS_INVOICE_KEY', default='')

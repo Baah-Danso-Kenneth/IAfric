@@ -8,6 +8,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import MenuPopUp from '../content/dropDowns/MenuPopUp';
 import CustomizeDropDown from '../content/dropDowns/CustomizeDropDown';
 import Image from 'next/image'
+import { usePathname } from 'next/navigation';
 
 
 type DropdownName = 'about' | 'customize' | 'experience' | 'destination' | null;
@@ -17,6 +18,7 @@ export function Header() {
     const [activeDropdown, setActiveDropdown] = useState<DropdownName>(null);
     const dropdownTimerRef = useRef<NodeJS.Timeout | null>(null);
     const dropdownContainerRef = useRef<HTMLDivElement>(null);
+    const pathname = usePathname();
     
     const toggleMenu = () => {
         setOpen(prev => !prev);
@@ -60,6 +62,11 @@ export function Header() {
     }, []);
 
 
+    const isLinkActive = (href: string) => {
+        if (href === '/' && pathname === '/') return true;
+        if (href !== '/' && pathname.startsWith(href)) return true;
+        return false;
+    };
 
     const getDropdownItems = (name: DropdownName) => {
         if (!name) return [];
@@ -107,6 +114,7 @@ export function Header() {
                             const lowerName = name.toLowerCase();
                             const normalizedName = lowerName === 'all experience' ? 'experience' : lowerName;
                             const isDropdownTrigger = ['about', 'customize', 'experience', 'destination'].includes(normalizedName);
+                            const isActive = isLinkActive(href);
                             
                             return isDropdownTrigger ? (
                                 <div 
@@ -116,7 +124,11 @@ export function Header() {
                                     onMouseLeave={handleMouseLeave}
                                     ref={normalizedName === activeDropdown ? dropdownContainerRef : null}
                                 >
-                                    <span className='hover:text-gray-200 transition-colors duration-200'>{name}</span>
+                                    <span className={`hover:text-gray-200 transition-colors duration-200 relative pb-1 ${
+                                        isActive ? 'border-b-2 border-white' : ''
+                                    }`}>
+                                        {name}
+                                    </span>
                                     
                                     {activeDropdown === normalizedName && (
                                         <div 
@@ -135,7 +147,11 @@ export function Header() {
                                 </div>
                             ) : (
                                 <Link href={href} key={index} className='hidden lg:flex hover:text-gray-200 transition-colors duration-200'>
-                                    <span>{name}</span>
+                                    <span className={`relative pb-1 ${
+                                        isActive ? 'border-b-2 border-white' : ''
+                                    }`}>
+                                        {name}
+                                    </span>
                                 </Link>
                             );
                         })}
@@ -143,7 +159,9 @@ export function Header() {
                         {/* Cart */}
                         <div className='flex items-center'>
                             <Link href="/cart" className='group'>
-                                <div className='relative flex items-center space-x-2 hover:text-gray-200 transition-colors duration-200'>
+                                <div className={`relative flex items-center space-x-2 hover:text-gray-200 transition-colors duration-200 pb-1 ${
+                                    pathname === '/cart' ? 'border-b-2 border-white' : ''
+                                }`}>
                                     <IoIosCart className='text-2xl'/>
                                     <span className='text-[15px] md:text-[18px] font-dmMono rounded-full'>0</span>
                                 </div>

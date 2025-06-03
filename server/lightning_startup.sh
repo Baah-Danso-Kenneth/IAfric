@@ -1,9 +1,10 @@
 #!/bin/bash
-# django_lightning_startup.sh - Ultra-quick startup for Django testing
-# Assumes Bitcoin Core regtest and LND are already configured
+# django_lightning_startup.sh - Robust startup for Django testing with Lightning
+# Verifies all dependencies and handles wallet states properly
 
 set -e
 
+# ─── Configuration ──────────────────────────────────────────────────────────────
 # Colors
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -11,18 +12,17 @@ BLUE='\033[0;34m'
 RED='\033[0;31m'
 NC='\033[0m'
 
-# Your specific paths
-LNBITS_DIR="/home/gee/lnbits"
-LND_DIR="/home/gee/.lnd-regtest"
+# Paths
+LNBITS_DIR="$HOME/lnbits"
+LND_DIR="$HOME/.lnd-regtest"
+LND_LOG="$LND_DIR/lnd.log"
+ENV_FILE="$LNBITS_DIR/.env"
 
-echo -e "${BLUE}🚀 Django Lightning Stack Startup${NC}"
-
-# Function to check if process is running on port
+# ─── Functions ──────────────────────────────────────────────────────────────────
 check_port() {
     lsof -Pi :$1 -sTCP:LISTEN -t >/dev/null 2>&1
 }
 
-# Function to kill process on port
 kill_port() {
     local port=$1
     local name=$2
@@ -33,133 +33,106 @@ kill_port() {
     fi
 }
 
-echo -e "\n${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-echo -e "${BLUE}📊 Checking Current Status${NC}"
-echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+wait_for_lnd() {
+    local timeout=30
+    echo -n "⏳ Waiting for LND to start"
+    for ((i=0; i<timeout; i++)); do
+        if check_port 8080 && lncli_exec "getinfo" >/dev/null 2>&1; then
+            echo -e "\n${GREEN}✅ LND ready${NC}"
+            return 0
+        fi
+        sleep 1
+        echo -n "."
+    done
+    echo -e "\n${RED}❌ LND startup timed out${NC}"
+    tail -n 20 "$LND_LOG"
+    exit 1
+}
 
-# Check Bitcoin Core
+lncli_exec() {
+    lncli --lnddir="$LND_DIR" --network=regtest "$@"
+}
+
+# ─── Main Execution ─────────────────────────────────────────────────────────────
+echo -e "${BLUE}🚀 Django Lightning Stack Startup${NC}"
+
+# ─── Bitcoin Core ───────────────────────────────────────────────────────────────
+echo -e "\n${BLUE}📊 Checking Bitcoin Core${NC}"
 if check_port 18443; then
-    BLOCKS=$(br getblockcount 2>/dev/null || echo "unknown")
-    BALANCE=$(br getwalletinfo 2>/dev/null | grep '"balance"' | cut -d: -f2 | cut -d, -f1 | tr -d ' ' || echo "unknown")
-    echo -e "${GREEN}✅ Bitcoin Core: Running ($BLOCKS blocks, $BALANCE BTC)${NC}"
+    BLOCKS=$(bitcoin-cli -regtest getblockcount 2>/dev/null || echo "unknown")
+    BALANCE=$(bitcoin-cli -regtest getwalletinfo 2>/dev/null | grep '"balance"' | awk '{print $2}' | cut -d. -f1)
+    echo -e "${GREEN}✅ Bitcoin Core running (${BLOCKS} blocks, ${BALANCE:-0} BTC)${NC}"
 else
-    echo -e "${RED}❌ Bitcoin Core not running - starting with your brstart alias...${NC}"
-    # Use your alias equivalent
+    echo -e "${RED}❌ Bitcoin Core not running. Starting...${NC}"
     bitcoind -regtest -daemon
     sleep 5
     echo -e "${GREEN}✅ Bitcoin Core started${NC}"
 fi
 
-# Check LND
-if check_port 8080; then
-    LND_INFO=$(lncli-regtest getinfo 2>/dev/null || echo "LOCKED")
-    if [[ "$LND_INFO" == *"identity_pubkey"* ]]; then
-        echo -e "${GREEN}✅ LND: Running and unlocked${NC}"
-    else
-        echo -e "${YELLOW}🔐 LND running but wallet locked - unlocking...${NC}"
-        echo "Enter your LND wallet password when prompted:"
-        lncli-regtest unlock
-    fi
-else
-    echo -e "${RED}❌ LND not running - starting...${NC}"
-    # Start LND with your exact configuration
+# ─── LND ────────────────────────────────────────────────────────────────────────
+echo -e "\n${BLUE}⚡ Initializing LND${NC}"
+kill_port 8080 "LND"
+
+# Start LND if not running
+if ! check_port 8080; then
+    echo -e "${YELLOW}⚠️  Starting LND (regtest)...${NC}"
     nohup lnd --lnddir="$LND_DIR" \
-        --bitcoin.regtest --bitcoin.node=bitcoind \
-        --bitcoind.rpcuser=regtest --bitcoind.rpcpass=regtest \
+        --bitcoin.regtest \
+        --bitcoin.node=bitcoind \
+        --bitcoind.rpcuser=regtest \
+        --bitcoind.rpcpass=regtest \
         --bitcoind.zmqpubrawblock=tcp://127.0.0.1:28332 \
         --bitcoind.zmqpubrawtx=tcp://127.0.0.1:28333 \
-        --listen=127.0.0.1:9735 \
-        --rpclisten=127.0.0.1:10009 --restlisten=127.0.0.1:8080 \
-        > "$LND_DIR/lnd.log" 2>&1 &
+        --rpclisten=127.0.0.1:10009 \
+        --restlisten=127.0.0.1:8080 \
+        > "$LND_LOG" 2>&1 &
 
-    echo "⏳ Waiting for LND to start..."
+    # Wait for LND to start listening (but don't check wallet yet)
+    echo -n "⏳ Waiting for LND RPC to start"
     for i in {1..30}; do
-        if check_port 8080; then break; fi
+        if check_port 8080; then
+            echo -e "\n${GREEN}✅ LND RPC ready${NC}"
+            break
+        fi
         sleep 1
         echo -n "."
+        if [ $i -eq 30 ]; then
+            echo -e "\n${RED}❌ LND RPC failed to start${NC}"
+            tail -n 20 "$LND_LOG"
+            exit 1
+        fi
     done
-    echo ""
-
-    if check_port 8080; then
-        echo -e "${GREEN}✅ LND started - please unlock wallet:${NC}"
-        lncli-regtest unlock
-    else
-        echo -e "${RED}❌ LND failed to start${NC}"
-        exit 1
-    fi
 fi
 
-echo -e "\n${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-echo -e "${BLUE}💡 Starting LNbits${NC}"
-echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+# Now handle wallet state with proper checks
+echo -n "⏳ Checking wallet status"
+for i in {1..10}; do
+    WALLET_STATUS=$(lncli_exec walletstatus 2>&1 || true)
 
-# Stop any existing LNbits
-kill_port 5000 "LNbits"
-
-# Navigate to LNbits directory
-cd "$LNBITS_DIR"
-echo "📁 Working in: $(pwd)"
-
-# Activate pyenv environment
-echo "🐍 Activating lnbits-env..."
-if command -v pyenv >/dev/null 2>&1; then
-    pyenv activate lnbits-env 2>/dev/null || {
-        echo -e "${YELLOW}⚠️  Could not activate lnbits-env, using current environment${NC}"
-    }
-fi
-
-# Start LNbits
-echo "🚀 Starting LNbits server..."
-nohup uvicorn lnbits.__main__:app --host 127.0.0.1 --port 5000 > lnbits.log 2>&1 &
-LNBITS_PID=$!
-
-# Wait for LNbits to be ready
-echo "⏳ Waiting for LNbits..."
-for i in {1..30}; do
-    if curl -s http://127.0.0.1:5000 >/dev/null 2>&1; then
-        echo -e "${GREEN}✅ LNbits is ready!${NC}"
+    if [[ "$WALLET_STATUS" == *"wallet not created"* ]]; then
+        echo -e "\n${YELLOW}🔑 Creating new LND wallet${NC}"
+        lncli_exec create
+        break
+    elif [[ "$WALLET_STATUS" == *"locked"* ]]; then
+        echo -e "\n${YELLOW}🔐 Unlocking LND wallet${NC}"
+        lncli_exec unlock
+        break
+    elif [[ "$WALLET_STATUS" == *"Wallet modified"* ]]; then
+        echo -e "\n${GREEN}💰 Wallet ready${NC}"
         break
     fi
+
     sleep 1
     echo -n "."
+
+    if [ $i -eq 10 ]; then
+        echo -e "\n${RED}❌ Could not determine wallet status${NC}"
+        echo "Last status: $WALLET_STATUS"
+        exit 1
+    fi
 done
-echo ""
 
-echo -e "\n${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-echo -e "${BLUE}🧪 Quick API Test${NC}"
-echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-
-# Test LNbits API with your admin key
-ADMIN_KEY="02dcd77469ac4359a1a96fc6ba7cb551"
-WALLET_RESPONSE=$(curl -s -H "X-Api-Key: $ADMIN_KEY" "http://127.0.0.1:5000/api/v1/wallet" 2>/dev/null || echo "FAILED")
-
-if [[ "$WALLET_RESPONSE" == *"balance"* ]]; then
-    BALANCE=$(echo "$WALLET_RESPONSE" | grep -o '"balance":[0-9]*' | cut -d':' -f2 2>/dev/null || echo "0")
-    echo -e "${GREEN}✅ LNbits API working! Wallet balance: $BALANCE sats${NC}"
-else
-    echo -e "${RED}❌ LNbits API test failed${NC}"
-fi
-
-echo -e "\n${GREEN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-echo -e "${GREEN}🎉 Ready for Django Testing!${NC}"
-echo -e "${GREEN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-echo ""
-echo "🌐 Services Running:"
-echo "   LNbits Web:  http://127.0.0.1:5000"
-echo "   LNbits API:  http://127.0.0.1:5000/docs"
-echo ""
-echo "🔑 API Keys for Django:"
-echo "   Admin Key:   02dcd77469ac4359a1a96fc6ba7cb551"
-echo "   Invoice Key: 93560f547adb4f3b97cb1777a061a788"
-echo ""
-echo "📊 Current Status:"
-echo "   Bitcoin: $(check_port 18443 && echo "✅ Running" || echo "❌ Down")"
-echo "   LND:     $(check_port 8080 && echo "✅ Running" || echo "❌ Down")"
-echo "   LNbits:  $(check_port 5000 && echo "✅ Running (PID: $LNBITS_PID)" || echo "❌ Down")"
-echo ""
-echo "🛑 To stop LNbits: kill $LNBITS_PID"
-echo ""
-echo -e "${GREEN}🚀 Your Django Lightning backend is ready to test!${NC}"
-
-# Stay in original directory if run from elsewhere
-cd - >/dev/null 2>&1 || true
+# Final verification
+LND_INFO=$(lncli_exec getinfo 2>/dev/null || { echo -e "${RED}❌ LND still not responding properly${NC}"; exit 1; })
+PUBKEY=$(echo "$LND_INFO" | grep identity_pubkey | cut -d'"' -f4)
+echo -e "${GREEN}⚡ LND ready (PubKey: ${PUBKEY:0:12}...)${NC}"

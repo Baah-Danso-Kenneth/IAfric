@@ -72,10 +72,9 @@ export default function Page() {
           productName={product.name}
         />
 
-        {/* Product Details & Actions */}
         <div className="flex flex-col">
           <ProductDetailsInfo product={product} />
-          <ProductActions />
+          <ProductActions product={product}/>
         </div>
       </div>
 

@@ -3,6 +3,7 @@ from django.urls import path
 from apps.experiences.views import (
     ExperienceDetailView
 )
+from apps.lightningPayments.viewsets import CurrencyUtilsViewSet
 from apps.lightningPayments.viewsets.product_payment_viewset import ProductPaymentViewSet
 
 from apps.shops.views import (
@@ -12,6 +13,7 @@ from apps.shops.views import (
 
 router = routers.SimpleRouter()
 router.register(r'payments', ProductPaymentViewSet, basename="payment-url")
+router.register(r'converts', CurrencyUtilsViewSet, basename="currency-url")
 
 urlpatterns=[
     *router.urls,

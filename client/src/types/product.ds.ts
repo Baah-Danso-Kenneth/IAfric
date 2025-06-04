@@ -11,6 +11,7 @@ export type ProductProps = {
     name:string;
     price_in_sats: number;
     price_in_fiat:string;
+    price?:number;
     images: ProductImageProps[];
     description:string;
 }

@@ -12,8 +12,8 @@ from apps.shops.views import (
 
 
 router = routers.SimpleRouter()
-router.register(r'payments', ProductPaymentViewSet, basename="payment-url")
-router.register(r'converts', CurrencyUtilsViewSet, basename="currency-url")
+router.register(r'payments', ProductPaymentViewSet, basename="payments")
+router.register(r'converts', CurrencyUtilsViewSet, basename="currency")
 
 urlpatterns=[
     *router.urls,

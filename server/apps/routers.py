@@ -1,5 +1,7 @@
 from rest_framework import routers
 from django.urls import path
+
+from apps.carts.viewsets import CartViewSet
 from apps.experiences.views import (
     ExperienceDetailView
 )
@@ -14,6 +16,7 @@ from apps.shops.views import (
 router = routers.SimpleRouter()
 router.register(r'payments', ProductPaymentViewSet, basename="payments")
 router.register(r'converts', CurrencyUtilsViewSet, basename="currency")
+router.register(r'carts', CartViewSet, basename="carts")
 
 urlpatterns=[
     *router.urls,

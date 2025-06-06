@@ -51,6 +51,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware', 
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -89,7 +90,6 @@ LANGUAGES = [
     ('zh-hans', 'Chinese(Simplified)'),
     ('de', 'German'),
     ('it', 'Italian'),
-
 ]
 
 
@@ -198,7 +198,7 @@ LOGGING = {
     },
 }
 
-# Lightning Payment Settings
+
 LIGHTNING_INVOICE_EXPIRY_MINUTES = 60
 LIGHTNING_PAYMENT_TIMEOUT_SECONDS = 30
 

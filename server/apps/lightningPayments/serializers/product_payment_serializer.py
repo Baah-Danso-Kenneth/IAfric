@@ -1,4 +1,3 @@
-# apps/lightningPayments/serializers.py
 from rest_framework import serializers
 from apps.lightningPayments.models import LightningPayment
 from apps.carts.serializers import CartSerializer
@@ -94,17 +93,25 @@ class ProductPaymentSerializer(serializers.ModelSerializer):
 
 
 class PaymentCreateSerializer(serializers.Serializer):
+    amount_sats = serializers.IntegerField()
+    payment_type = serializers.CharField()
+    description = serializers.CharField()
+    reference_id = serializers.CharField()
+    fiat_amount = serializers.DecimalField(max_digits=10, decimal_places=2)
+    fiat_currency = serializers.CharField(default='USD')
+    expiry_minutes = serializers.IntegerField(default=60, min_value=5, max_value=1440)
+    metadata = serializers.JSONField(required=False)
 
-    product_id = serializers.IntegerField(required=False)
-    quantity = serializers.IntegerField(default=1, min_value=1)
-    expiry_minutes = serializers.IntegerField(default=60, min_value=5, max_value=1440)  # Max 24 hours
+    def create(self, validated_data):
+        """Create payment using PaymentService"""
+        from apps.lightningPayments.services import PaymentService
 
-    def validate_quantity(self, value):
-        if value < 1:
-            raise serializers.ValidationError("Quantity must be at least 1")
-        if value > 100:  # Reasonable limit
-            raise serializers.ValidationError("Quantity cannot exceed 100")
-        return value
+        # Remove any extra fields that PaymentService doesn't expect
+        payment_data = validated_data.copy()
+
+        # Call PaymentService.create_payment with the validated data
+        payment = PaymentService.create_payment(**payment_data)
+        return payment
 
 
 class PaymentStatusSerializer(serializers.Serializer):

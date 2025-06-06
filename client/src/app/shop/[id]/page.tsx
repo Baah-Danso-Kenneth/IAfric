@@ -31,7 +31,7 @@ export default function Page() {
 
   if (error || !product) {
     return (
-      <div className="max-w-7xl mx-auto px-4 py-10">
+      <div className="max-w-7xl mx-auto px-4 py-10 ">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-gray-900 mb-4">Product Not Found</h1>
           <p className="text-gray-600 mb-6">The product you're looking for doesn't exist.</p>
@@ -53,7 +53,7 @@ export default function Page() {
   return (
     <section>
       <Header/>
-    <div className="max-w-7xl mx-auto px-4 py-6 lg:py-10">
+    <div className="max-w-7xl mx-auto px-4 py-6 lg:py-10  ">
       {/* Back Navigation */}
       <div className="mb-6">
         <Link 
@@ -72,10 +72,9 @@ export default function Page() {
           productName={product.name}
         />
 
-        {/* Product Details & Actions */}
         <div className="flex flex-col">
           <ProductDetailsInfo product={product} />
-          <ProductActions />
+          <ProductActions product={product}/>
         </div>
       </div>
 

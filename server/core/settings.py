@@ -78,6 +78,20 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'core.wsgi.application'
 
+LANGUAGE_CODE = 'en'
+TIME_ZONE = 'UTC'
+USE_I18N=True
+USE_L10N=True
+
+LANGUAGES = [
+    ('en', 'English'),
+    ('es', 'Spanish'),
+    ('zh-hans', 'Chinese(Simplified)'),
+    ('de', 'German'),
+    ('it', 'Italian'),
+
+]
+
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
@@ -144,14 +158,21 @@ REST_FRAMEWORK = {
     ['django_filters.rest_framework.DjangoFilterBackend']
 }
 
+SESSION_COOKIE_AGE = 60 * 60 * 24 * 30
+SESSION_SAVE_EVERY_REQUEST = False
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+SESSION_COOKIE_SECURE = False
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = 'Lax'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+CORS_ALLOW_CREDENTIALS =True
+
 CORS_ALLOWED_ORIGINS = [
-    "https://example.com",
-    "https://sub.example.com",
     "http://localhost:3000",
 ]
+
 
 
 LOGGING = {

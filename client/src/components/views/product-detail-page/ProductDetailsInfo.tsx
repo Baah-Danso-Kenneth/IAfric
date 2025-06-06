@@ -31,16 +31,26 @@ export default function ProductDetailsInfo({ product }: ProductDetailsInfoProps)
       {/* Product Specifications */}
       <div className="border-t border-gray-200 pt-6">
         <h3 className="text-lg font-semibold text-gray-900 mb-4">Product Details</h3>
-        <dl className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+
           <div className="flex justify-between py-2 border-b border-gray-100">
-            <dt className="text-gray-600 font-medium">Product ID:</dt>
-            <dd className="text-gray-900">{product.id}</dd>
+
+            <div className='flex items-center gap-2'>
+            <h1 className="text-gray-600 font-medium">Product ID:</h1>
+            <h1 className="text-gray-900">{product.id}</h1>
+            </div>
+
+     
+
+          <div className='flex items-center gap-2'>
+            <h1 className="text-gray-600 font-medium">Availability:</h1>
+            <h1 className="text-green-600 font-medium">In Stock</h1>
+         </div>
+
           </div>
-          <div className="flex justify-between py-2 border-b border-gray-100">
-            <dt className="text-gray-600 font-medium">Availability:</dt>
-            <dd className="text-green-600 font-medium">In Stock</dd>
-          </div>
-        </dl>
+
+
+        </div>
       </div>
     </div>
   );

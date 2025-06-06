@@ -3,7 +3,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 
 interface LazyVideoPlayerProps {
-  videoSrc?: string; // Made optional with default
+  videoSrc?: string; 
 }
 
 function LazyVideoPlayer({ videoSrc = "/video/litra-video.mp4" }: LazyVideoPlayerProps) {
@@ -18,7 +18,7 @@ function LazyVideoPlayer({ videoSrc = "/video/litra-video.mp4" }: LazyVideoPlaye
       ([entry]) => {
         setIsInView(entry.isIntersecting);
         
-        // Control video playback based on visibility
+      
         if (videoRef.current) {
           if (entry.isIntersecting) {
             videoRef.current.play().catch(console.error);
@@ -28,7 +28,7 @@ function LazyVideoPlayer({ videoSrc = "/video/litra-video.mp4" }: LazyVideoPlaye
         }
       }, 
       { 
-        threshold: 0.3, // Play when 30% of video is visible
+        threshold: 0.3, 
         rootMargin: "50px" 
       }
     );

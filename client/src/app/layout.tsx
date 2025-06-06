@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import localFont from 'next/font/local'
 import "./globals.css";
-import { Suspense } from "react";
 import PageTransitionLoader from "@/components/content/common/PageTransitionLoader";
 import { Providers } from "./Provider";
 
@@ -47,7 +46,9 @@ export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
-}>) {
+}>)
+{
+
   return (
     <html lang="en">
 <body
@@ -63,7 +64,6 @@ export default function RootLayout({
     {children}
   </div>
   </Providers>
-
 
 </body>
 

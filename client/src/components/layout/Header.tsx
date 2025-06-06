@@ -9,7 +9,7 @@ import MenuPopUp from '../content/dropDowns/MenuPopUp';
 import CustomizeDropDown from '../content/dropDowns/CustomizeDropDown';
 import Image from 'next/image'
 import { usePathname } from 'next/navigation';
-
+import { useCart } from '@/hooks/useCart'; // Updated import
 
 type DropdownName = 'about' | 'customize' | 'experience' | 'destination' | null;
 
@@ -19,6 +19,25 @@ export function Header() {
     const dropdownTimerRef = useRef<NodeJS.Timeout | null>(null);
     const dropdownContainerRef = useRef<HTMLDivElement>(null);
     const pathname = usePathname();
+    
+    // Use the custom hook instead of direct Redux
+    const { cart, loading: cartLoading, error: cartError, itemCount: cartCount, fetchCart } = useCart();
+    
+    // Fetch cart on mount
+    useEffect(() => {
+        fetchCart();
+    }, [fetchCart]);
+    
+    // Debug logging
+    useEffect(() => {
+        if (cart) {
+            console.log('Cart in Header:', cart);
+            console.log('Cart Count:', cartCount);
+        }
+        if (cartError) {
+            console.error('Cart loading error:', cartError);
+        }
+    }, [cart, cartCount, cartError]);
     
     const toggleMenu = () => {
         setOpen(prev => !prev);
@@ -61,7 +80,6 @@ export function Header() {
         };
     }, []);
 
-
     const isLinkActive = (href: string) => {
         if (href === '/' && pathname === '/') return true;
         if (href !== '/' && pathname.startsWith(href)) return true;
@@ -95,7 +113,6 @@ export function Header() {
                         )}
                     </div>
                     
- 
                     <Link href="/" className='flex items-center'>
                         <Image 
                             src="/images/logo.svg" 
@@ -106,7 +123,6 @@ export function Header() {
                             priority
                         />
                     </Link>
-                   
 
                     {/* Navigation */}
                     <nav className='flex items-center capitalize space-x-8 text-[18px] font-extralight'>
@@ -163,7 +179,14 @@ export function Header() {
                                     pathname === '/cart' ? 'border-b-2 border-white' : ''
                                 }`}>
                                     <IoIosCart className='text-2xl'/>
-                                    <span className='text-[15px] md:text-[18px] font-dmMono rounded-full'>0</span>
+                                    <span className='text-[15px] md:text-[18px] font-dmMono rounded-full'>
+                                        {/* {cartLoading ? (
+                                            <div className='animate-pulse bg-gray-300 rounded w-4 h-4'></div>
+                                        ) : (
+                                            
+                                        )} */}
+                                        {cartCount}
+                                    </span>
                                 </div>
                             </Link>
                         </div>

@@ -2,7 +2,7 @@ import {configureStore} from '@reduxjs/toolkit'
 import { allExperienceApi } from './features/all-experience/allExperieneApi'
 import { listProductsApi } from './features/list-products/list-products'
 import { paymentsApi } from './features/payment/paymentApi'
-import { cartApi } from './features/carts/cartsApi'
+import cartReducer from './features/carts/cartSlice'
 
 
 export const store = configureStore({
@@ -10,14 +10,16 @@ export const store = configureStore({
         [allExperienceApi.reducerPath]: allExperienceApi.reducer,
         [listProductsApi.reducerPath]: listProductsApi.reducer,
         [paymentsApi.reducerPath]: paymentsApi.reducer,
-        [cartApi.reducerPath]: cartApi.reducer
+        cart: cartReducer
+        
+    
     },
     middleware: (getDefaultMiddleware)=>
         getDefaultMiddleware().concat(
             allExperienceApi.middleware,
             listProductsApi.middleware,
             paymentsApi.middleware,
-            cartApi.middleware,
+         
         ),
 })
 

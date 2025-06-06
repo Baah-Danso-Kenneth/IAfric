@@ -1,3 +1,4 @@
+from django.utils.translation import gettext_lazy as _
 from django.db import models
 from django.utils.text import slugify
 from django.core.validators import MinValueValidator
@@ -10,24 +11,27 @@ from apps.lightningPayments.models import LightningPayment
 from apps.locations.models import Location, TourGuide
 import uuid
 
+
+
 class ExperienceCategory(models.Model):
 
-    name = models.CharField(max_length=255, unique=True)
-    slug = models.SlugField(max_length=255, unique=True, blank=True)
-    description = models.TextField(blank=True)
-    image = models.ImageField(upload_to="experiences/categories/", blank=True, null=True)
-    order = models.PositiveIntegerField(default=0)
-    is_featured = models.BooleanField(default=False)
+    name = models.CharField(_('Name'), max_length=255, unique=True)
+    slug = models.SlugField(_('Slug'), max_length=255, unique=True, blank=True)
+    description = models.TextField(_('Description'), blank=True)
+    image = models.ImageField(_('Image'), upload_to="experiences/categories/", blank=True, null=True)
+    order = models.PositiveIntegerField(_('Order'), default=0)
+    is_featured = models.BooleanField(_('Is Featured'), default=False)
 
     # SEO fields
-    meta_title = models.CharField(max_length=255, blank=True)
-    meta_description = models.TextField(blank=True)
+    meta_title = models.CharField(_('Meta Title'), max_length=255, blank=True)
+    meta_description = models.TextField(_('Meta Description'), blank=True)
 
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(_('Created At'), auto_now_add=True)
+    updated_at = models.DateTimeField(_('Updated At'), auto_now=True)
 
     class Meta:
-        verbose_name_plural = "Experience Categories"
+        verbose_name = _('Experience Category')
+        verbose_name_plural = _('Experience Categories')
         ordering = ['order', 'name']
 
     def save(self, *args, **kwargs):
@@ -42,60 +46,62 @@ class ExperienceCategory(models.Model):
 
 class Experience(models.Model):
     DIFFICULTY_CHOICES = [
-        ('easy', 'Easy - Suitable for all'),
-        ('moderate', 'Moderate - Some physical activity'),
-        ('challenging', 'Challenging - Requires good fitness'),
-        ('expert', 'Expert - Advanced skills required')
+        ('easy', _('Easy - Suitable for all')),
+        ('moderate', _('Moderate - Some physical activity')),
+        ('challenging', _('Challenging - Requires good fitness')),
+        ('expert', _('Expert - Advanced skills required'))
     ]
         
-    name = models.CharField(max_length=255)
-    slug = models.SlugField(max_length=255, unique=True, blank=True)
-    short_description = models.TextField(help_text="Brief summary for listings")
-    description = models.TextField()
-    category = models.ForeignKey(ExperienceCategory, on_delete=models.PROTECT,default=1)
-    location = models.ManyToManyField(Location)
-    place_name = models.CharField(max_length=200, null=True, blank=True)
-    duration_minutes = models.PositiveIntegerField(help_text="Duration in minutes")
-    duration_days = models.PositiveIntegerField(null=True, blank=True)  # From first code
-    duration_nights = models.PositiveIntegerField(null=True, blank=True)  # From first code
-    max_participants = models.PositiveIntegerField(default=10)
-    min_participants = models.PositiveIntegerField(default=1)
-    difficulty = models.CharField(max_length=12, choices=DIFFICULTY_CHOICES, default='easy')
-    what_to_bring = models.TextField(blank=True, help_text="What participants should bring")
+    name = models.CharField(_('Name'), max_length=255)
+    slug = models.SlugField(_('Slug'), max_length=255, unique=True, blank=True)
+    short_description = models.TextField(_('Short Description'), help_text=_("Brief summary for listings"))
+    description = models.TextField(_('Description'))
+    category = models.ForeignKey(ExperienceCategory, on_delete=models.PROTECT, default=1, verbose_name=_('Category'))
+    location = models.ManyToManyField(Location, verbose_name=_('Location'))
+    place_name = models.CharField(_('Place Name'), max_length=200, null=True, blank=True)
+    duration_minutes = models.PositiveIntegerField(_('Duration (minutes)'), help_text=_("Duration in minutes"))
+    duration_days = models.PositiveIntegerField(_('Duration (days)'), null=True, blank=True)  # From first code
+    duration_nights = models.PositiveIntegerField(_('Duration (nights)'), null=True, blank=True)  # From first code
+    max_participants = models.PositiveIntegerField(_('Maximum Participants'), default=10)
+    min_participants = models.PositiveIntegerField(_('Minimum Participants'), default=1)
+    difficulty = models.CharField(_('Difficulty'), max_length=12, choices=DIFFICULTY_CHOICES, default='easy')
+    what_to_bring = models.TextField(_('What to Bring'), blank=True, help_text=_("What participants should bring"))
 
     # Requirements and restrictions
-    min_age = models.PositiveIntegerField(default=0, help_text="Minimum age requirement (0 for no restriction)")
-    accessibility_notes = models.TextField(blank=True, help_text="Accessibility information")
-    requirements = models.TextField(blank=True, help_text="Special requirements for participants")
+    min_age = models.PositiveIntegerField(_('Minimum Age'), default=0, help_text=_("Minimum age requirement (0 for no restriction)"))
+    accessibility_notes = models.TextField(_('Accessibility Notes'), blank=True, help_text=_("Accessibility information"))
+    requirements = models.TextField(_('Requirements'), blank=True, help_text=_("Special requirements for participants"))
 
     # Pricing (support for both satoshis and traditional currency)
-    price_in_sats = models.PositiveIntegerField(validators=[MinValueValidator(1)])
-    price_in_currency = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
-    base_price_per_person = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)  # From first code
-    currency = models.CharField(max_length=3, default="USD")
+    price_in_sats = models.PositiveIntegerField(_('Price (sats)'), validators=[MinValueValidator(1)])
+    price_in_currency = models.DecimalField(_('Price (currency)'), max_digits=10, decimal_places=2, null=True, blank=True)
+    base_price_per_person = models.DecimalField(_('Base Price Per Person'), max_digits=10, decimal_places=2, default=0.00)  # From first code
+    currency = models.CharField(_('Currency'), max_length=3, default="USD")
 
     # Status fields
-    is_active = models.BooleanField(default=True)
-    is_featured = models.BooleanField(default=False)
-    is_purchasable = models.BooleanField(default=True)
-    is_reverse_season = models.BooleanField(default=False)  # From first code
-    season_note = models.TextField(blank=True, null=True)  # From first code
+    is_active = models.BooleanField(_('Is Active'), default=True)
+    is_featured = models.BooleanField(_('Is Featured'), default=False)
+    is_purchasable = models.BooleanField(_('Is Purchasable'), default=True)
+    is_reverse_season = models.BooleanField(_('Is Reverse Season'), default=False)  # From first code
+    season_note = models.TextField(_('Season Note'), blank=True, null=True)  # From first code
 
     # Main image
-    main_image = models.ImageField(upload_to='experiences/backdrop/', null=True, blank=True)  # From first code
+    main_image = models.ImageField(_('Main Image'), upload_to='experiences/backdrop/', null=True, blank=True)  # From first code
 
     # Historical/cultural information
-    historical_content = models.TextField(blank=True, null=True)
+    historical_content = models.TextField(_('Historical Content'), blank=True, null=True)
 
     # Timestamps
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(_('Created At'), auto_now_add=True)
+    updated_at = models.DateTimeField(_('Updated At'), auto_now=True)
 
     # SEO
-    meta_title = models.CharField(max_length=255, blank=True)
-    meta_description = models.TextField(blank=True)
+    meta_title = models.CharField(_('Meta Title'), max_length=255, blank=True)
+    meta_description = models.TextField(_('Meta Description'), blank=True)
 
     class Meta:
+        verbose_name = _('Experience')
+        verbose_name_plural = _('Experiences')
         ordering = ['-is_featured', 'name']
         indexes = [
             models.Index(fields=['slug']),
@@ -117,11 +123,22 @@ class Experience(models.Model):
         """Format duration in human-readable format (e.g., '2 hours 30 minutes')"""
         hours, minutes = divmod(self.duration_minutes, 60)
         if hours and minutes:
-            return f"{hours} hour{'s' if hours != 1 else ''} {minutes} minute{'s' if minutes != 1 else ''}"
+            return _('{hours} hour{hours_plural} {minutes} minute{minutes_plural}').format(
+                hours=hours,
+                hours_plural='s' if hours != 1 else '',
+                minutes=minutes,
+                minutes_plural='s' if minutes != 1 else ''
+            )
         elif hours:
-            return f"{hours} hour{'s' if hours != 1 else ''}"
+            return _('{hours} hour{hours_plural}').format(
+                hours=hours,
+                hours_plural='s' if hours != 1 else ''
+            )
         else:
-            return f"{minutes} minute{'s' if minutes != 1 else ''}"
+            return _('{minutes} minute{minutes_plural}').format(
+                minutes=minutes,
+                minutes_plural='s' if minutes != 1 else ''
+            )
 
     @property
     def available_guides(self):

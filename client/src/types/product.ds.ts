@@ -7,6 +7,7 @@ export type ProductImageProps = {
     alt_text?:string;
 }
 export type ProductProps = {
+    image: string;
     id:number;
     name:string;
     price_in_sats: number;

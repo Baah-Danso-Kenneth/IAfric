@@ -4,19 +4,17 @@ import { Button } from '@/components/ui/button'
 import Image from 'next/image'
 import React, { useState, useCallback, useEffect } from 'react'
 import { Minus, Plus, X, Edit3, ShoppingBag, Loader2 } from 'lucide-react'
-import { useCart } from '@/hooks/useCart'; // Updated import
+import { useCart } from '@/hooks/useCart'
 import { CartItem } from '@/types/cart.dt'
 
 function CartContent() {
-  // Use the custom hook instead of RTK Query
   const { 
     cart, 
     loading: isLoading, 
     error, 
-    fetchCart, 
     updateItem, 
     removeItem, 
-    clearCartItems 
+    clearCartItems
   } = useCart();
   
   // Track which items are being updated individually
@@ -24,72 +22,16 @@ function CartContent() {
   const [removingItems, setRemovingItems] = useState<Set<number>>(new Set());
   const [isClearing, setIsClearing] = useState(false);
 
-  // Fetch cart on mount
+  // Log cart state changes
   useEffect(() => {
-    fetchCart();
-  }, [fetchCart]);
-
-  const handleQuantityChange = useCallback(async (cartItemId: number, newQuantity: number) => {
-    if (newQuantity < 1) return;
-    
-    setUpdatingItems(prev => new Set(prev).add(cartItemId));
-    
-    try {
-      await updateItem({
-        cart_item_id: cartItemId,
-        quantity: newQuantity
-      });
-      
-      console.log('Item updated successfully');
-    } catch (error: any) {
-      console.error('Failed to update item:', error);
-      // You might want to show a toast notification here
-    } finally {
-      setUpdatingItems(prev => {
-        const newSet = new Set(prev);
-        newSet.delete(cartItemId);
-        return newSet;
-      });
-    }
-  }, [updateItem]);
-
-  const handleRemoveItem = useCallback(async (cartItemId: number) => {
-    setRemovingItems(prev => new Set(prev).add(cartItemId));
-    
-    try {
-      await removeItem({
-        cart_item_id: cartItemId
-      });
-      
-      console.log('Item removed successfully');
-    } catch (error: any) {
-      console.error('Failed to remove item:', error);
-    } finally {
-      setRemovingItems(prev => {
-        const newSet = new Set(prev);
-        newSet.delete(cartItemId);
-        return newSet;
-      });
-    }
-  }, [removeItem]);
-
-  const handleClearCart = useCallback(async () => {
-    if (window.confirm('Are you sure you want to clear your cart?')) {
-      setIsClearing(true);
-      try {
-        await clearCartItems();
-        console.log('Cart cleared successfully');
-      } catch (error: any) {
-        console.error('Failed to clear cart:', error);
-      } finally {
-        setIsClearing(false);
-      }
-    }
-  }, [clearCartItems]);
-
-  const handleRetry = useCallback(() => {
-    fetchCart();
-  }, [fetchCart]);
+    console.log('CartContent: Cart state updated:', {
+      cart,
+      loading: isLoading,
+      error,
+      itemCount: cart?.item_count,
+      itemsLength: cart?.items?.length
+    });
+  }, [cart, isLoading, error]);
 
   // Loading state
   if (isLoading) {
@@ -113,20 +55,8 @@ function CartContent() {
       <div className='py-10 lg:py-20 bg-limeGreen bg-texture'>
         <div className='max-w-6xl mx-auto px-4 sm:px-6 lg:px-8'>
           <div className='flex items-center justify-center min-h-[400px]'>
-            <div className='text-center'>
-              <div className='w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4'>
-                <X className='w-8 h-8 text-red-500' />
-              </div>
-              <h2 className='text-xl font-semibold text-gray-900 mb-2'>Error loading cart</h2>
-              <p className='text-gray-600 mb-4'>
-                {typeof error === 'string' ? error : 'Something went wrong. Please try again.'}
-              </p>
-              <Button 
-                onClick={handleRetry}
-                className='bg-electricPurple hover:bg-electricPurple/90'
-              >
-                Try Again
-              </Button>
+            <div className='flex flex-col items-center gap-4'>
+              <p className='text-red-600'>Error loading cart: {error}</p>
             </div>
           </div>
         </div>
@@ -134,8 +64,29 @@ function CartContent() {
     );
   }
 
-  // Check if cart is empty or undefined
-  const isEmpty = !cart?.items?.length;
+  // Empty cart state
+  if (!cart || cart.is_empty) {
+    return (
+      <div className='py-10 lg:py-20 bg-limeGreen bg-texture'>
+        <div className='max-w-6xl mx-auto px-4 sm:px-6 lg:px-8'>
+          <div className='text-center py-16 lg:py-24'>
+            <div className='w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6'>
+              <ShoppingBag className='w-12 h-12 text-gray-400' />
+            </div>
+            <h2 className='text-2xl lg:text-3xl font-semibold text-gray-900 mb-4'>Your cart is empty</h2>
+            <p className='text-gray-600 mb-8 max-w-md mx-auto'>
+              Looks like you haven't added any items to your cart yet. Start shopping to fill it up!
+            </p>
+            <Button className='bg-electricPurple hover:bg-electricPurple/90 text-white px-8 py-3'>
+              Start Shopping
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  console.log('Cart data:', cart); // Add this for debugging
 
   return (
     <div className='py-10 lg:py-20 bg-limeGreen bg-texture'>
@@ -147,9 +98,9 @@ function CartContent() {
             Shopping Cart {cart?.item_count ? `(${cart.item_count})` : ''}
           </h1>
           
-          {!isEmpty && (
+          {!cart.is_empty && (
             <Button
-              onClick={handleClearCart}
+              onClick={() => clearCartItems()}
               disabled={isClearing}
               variant="outline"
               className='text-red-600 border-red-600 hover:bg-red-50 disabled:opacity-50'
@@ -167,7 +118,7 @@ function CartContent() {
         </div>
 
         {/* Empty Cart State */}
-        {isEmpty ? (
+        {cart.is_empty && (
           <div className='text-center py-16 lg:py-24'>
             <div className='w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6'>
               <ShoppingBag className='w-12 h-12 text-gray-400' />
@@ -180,34 +131,30 @@ function CartContent() {
               Start Shopping
             </Button>
           </div>
-        ) : (
-          /* Cart Items Container */
+        )}
+
+        {/* Cart Items Container */}
+        {!cart.is_empty && (
           <div className='bg-white rounded-lg shadow-sm overflow-hidden mb-6 lg:mb-8'>
             
             {/* Cart Items */}
-            {cart!.items.map((item: CartItem, index: number) => {
+            {cart.items.map((item: CartItem, index: number) => {
               const isItemUpdating = updatingItems.has(item.id);
               const isItemRemoving = removingItems.has(item.id);
               
               return (
-                <div key={`${item.id}-${item.product?.id}`} className={`p-6 lg:p-8 ${index < cart!.items.length - 1 ? 'border-b-2 border-gray-100' : ''} ${isItemRemoving ? 'opacity-50' : ''}`}>
+                <div key={`${item.id}-${item.product?.id}`} className={`p-6 lg:p-8 ${index < cart.items.length - 1 ? 'border-b-2 border-gray-100' : ''} ${isItemRemoving ? 'opacity-50' : ''}`}>
                   <div className='flex flex-col lg:flex-row gap-6 lg:gap-8'>
                     
-                    {/* Product Info Section */}
                     <div className='flex flex-col lg:flex-row gap-4 lg:gap-6 flex-1'>
-                      {/* Product Image */}
                       <div className='flex-shrink-0'>
                         <div className='relative w-20 h-20 sm:w-24 sm:h-24 lg:w-32 lg:h-32 rounded-lg overflow-hidden bg-gray-100'>
                           <Image 
-                            src={item.product?.image || "/images/hero-img.jpg"} 
+                            src={item.product?.images?.[0]?.front_image || "/images/hero-img.jpg"}
                             alt={item.product?.name || 'Product'} 
                             fill
                             className='object-cover hover:scale-105 transition-transform duration-300'
                             sizes="(max-width: 640px) 80px, (max-width: 1024px) 96px, 128px"
-                            onError={(e) => {
-                              const target = e.target as HTMLImageElement;
-                              target.src = "/images/hero-img.jpg";
-                            }}
                           />
                         </div>
                       </div>
@@ -237,7 +184,10 @@ function CartContent() {
                       <span className='text-sm lg:text-base font-medium text-gray-700 lg:mb-2'>Quantity</span>
                       <div className='flex items-center gap-3 bg-gray-50 rounded-xl p-2'>
                         <button 
-                          onClick={() => handleQuantityChange(item.id, item.quantity - 1)}
+                          onClick={() => updateItem({
+                            cart_item_id: item.id,
+                            quantity: item.quantity - 1
+                          })}
                           className='w-8 h-8 lg:w-10 lg:h-10 rounded-lg bg-white shadow-md hover:shadow-lg flex items-center justify-center text-gray-600 hover:text-electricPurple transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed'
                           disabled={item.quantity <= 1 || isItemUpdating || isItemRemoving}
                           aria-label="Decrease quantity"
@@ -248,7 +198,10 @@ function CartContent() {
                           {item.quantity}
                         </span>
                         <button 
-                          onClick={() => handleQuantityChange(item.id, item.quantity + 1)}
+                          onClick={() => updateItem({
+                            cart_item_id: item.id,
+                            quantity: item.quantity + 1
+                          })}
                           className='w-8 h-8 lg:w-10 lg:h-10 rounded-lg bg-white shadow-md hover:shadow-lg flex items-center justify-center text-gray-600 hover:text-electricPurple transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed'
                           disabled={isItemUpdating || isItemRemoving}
                           aria-label="Increase quantity"
@@ -269,7 +222,9 @@ function CartContent() {
                         </div>
                       </div>
                       <button 
-                        onClick={() => handleRemoveItem(item.id)}
+                        onClick={() => removeItem({
+                          cart_item_id: item.id
+                        })}
                         disabled={isItemRemoving || isItemUpdating}
                         className='w-10 h-10 rounded-full bg-red-50 hover:bg-red-100 flex items-center justify-center text-red-500 hover:text-red-600 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed'
                         aria-label="Remove item from cart"
@@ -294,7 +249,7 @@ function CartContent() {
                 {/* Item Count */}
                 <div className='flex items-center gap-4 text-base lg:text-lg'>
                   <span className='font-medium text-gray-700'>
-                    Items: {cart!.item_count || cart!.items.length}
+                    Items: {cart.item_count || cart.items.length}
                   </span>
                 </div>
 
@@ -302,7 +257,7 @@ function CartContent() {
                 <div className='flex items-center gap-4 text-lg lg:text-xl'>
                   <span className='font-medium text-gray-700'>Total:</span>
                   <span className='font-bold text-gray-900'>
-                    {(cart!.total_sats || 0).toLocaleString()} sats
+                    {(cart.total_sats || 0).toLocaleString()} sats
                   </span>
                 </div>
 

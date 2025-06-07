@@ -255,4 +255,3 @@ export const selectCartItemCount = (state: { cart: CartState }) => {
     return total + quantity;
   }, 0);
 };
-

@@ -18,23 +18,33 @@ import {
   UpdateItemRequest, 
   RemoveItemRequest 
 } from "@/types/cart.dt";
-import { useCallback } from 'react';
+import { useCallback, useRef, useEffect } from 'react';
 
 export const useCart = () => {
   const dispatch = useDispatch<AppDispatch>();
+  const mounted = useRef(false);
   
   const cart = useSelector(selectCart);
   const loading = useSelector(selectCartLoading);
   const error = useSelector(selectCartError);
   const itemCount = useSelector(selectCartItemCount);
 
+  useEffect(() => {
+    mounted.current = true;
+    return () => {
+      mounted.current = false;
+    };
+  }, []);
+
   // Memoize actions to prevent unnecessary re-renders
   const fetchCart = useCallback(() => {
+    if (!mounted.current) return;
     console.log('Fetching cart...');
     return dispatch(getCurrentCart());
   }, [dispatch]);
   
   const addItem = useCallback(async (item: AddItemRequest) => {
+    if (!mounted.current) return;
     console.log('Adding item to cart:', item);
     
     try {
@@ -55,6 +65,7 @@ export const useCart = () => {
   }, [dispatch]);
 
   const updateItem = useCallback(async (item: UpdateItemRequest) => {
+    if (!mounted.current) return;
     console.log('Updating cart item:', item);
     
     try {
@@ -75,6 +86,7 @@ export const useCart = () => {
   }, [dispatch]);
 
   const removeItem = useCallback(async (item: RemoveItemRequest) => {
+    if (!mounted.current) return;
     console.log('Removing cart item:', item);
     
     try {
@@ -95,6 +107,7 @@ export const useCart = () => {
   }, [dispatch]);
 
   const clearCartItems = useCallback(async () => {
+    if (!mounted.current) return;
     console.log('Clearing cart...');
     
     try {
@@ -115,23 +128,28 @@ export const useCart = () => {
   }, [dispatch]);
 
   const clearCartError = useCallback(() => {
+    if (!mounted.current) return;
     console.log('Clearing cart error');
     dispatch(clearError());
   }, [dispatch]);
   
   const resetCartState = useCallback(() => {
+    if (!mounted.current) return;
     console.log('Resetting cart state');
     dispatch(resetCart());
   }, [dispatch]);
 
   // Debug logging
-  console.log('Cart Hook State:', {
-    cartExists: !!cart,
-    itemCount,
-    loading,
-    error,
-    cartItems: cart?.items?.length || 0
-  });
+  useEffect(() => {
+    if (!mounted.current) return;
+    console.log('Cart Hook State:', {
+      cartExists: !!cart,
+      itemCount,
+      loading,
+      error,
+      cartItems: cart?.items?.length || 0
+    });
+  }, [cart, itemCount, loading, error]);
 
   return {
     // State
@@ -140,7 +158,7 @@ export const useCart = () => {
     error,
     itemCount,
     
-  
+    // Actions
     fetchCart,
     addItem,
     updateItem,

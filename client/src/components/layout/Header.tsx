@@ -21,12 +21,7 @@ export function Header() {
     const pathname = usePathname();
     
     // Use the custom hook instead of direct Redux
-    const { cart, loading: cartLoading, error: cartError, itemCount: cartCount, fetchCart } = useCart();
-    
-    // Fetch cart on mount
-    useEffect(() => {
-        fetchCart();
-    }, [fetchCart]);
+    const { cart, loading: cartLoading, error: cartError, itemCount: cartCount } = useCart();
     
     // Debug logging
     useEffect(() => {

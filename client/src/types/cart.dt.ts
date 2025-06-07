@@ -14,7 +14,7 @@ export interface CartItem {
   price: number; 
   quantity: number;
   total_price: number;
-  product: ProductProps | null; 
+  product?: ProductProps | null; 
   variant_id?: number;
   variant_name?: string;
   date_added: string;

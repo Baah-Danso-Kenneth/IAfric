@@ -1,3 +1,4 @@
+# Improved views.py
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -5,6 +6,7 @@ from rest_framework.permissions import AllowAny
 from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import get_object_or_404
 from django.db import transaction
+from django.core.exceptions import ValidationError
 from .models import Cart, CartItem
 from .serializers import CartSerializer, CartItemSerializer
 import logging
@@ -16,22 +18,20 @@ class CartViewSet(viewsets.ModelViewSet):
     serializer_class = CartSerializer
     permission_classes = [AllowAny]
 
-    @transaction.atomic
-    @transaction.atomic
-    def _get_or_create_cart(self):
+    def get_queryset(self):
+        # Only return the current user's cart
+        cart = self._get_or_create_cart()
+        return Cart.objects.filter(id=cart.id)
 
+    def _get_or_create_cart(self):
+        """Get or create cart - optimized version"""
         user = self.request.user if self.request.user.is_authenticated else None
 
+        # Ensure session exists
         if not self.request.session.session_key:
             self.request.session.save()
 
         session_key = self.request.session.session_key
-
-        logger.info(f"Cart request - User: {user}, Session: {session_key[:8] if session_key else 'None'}...")
-
-        existing_carts = Cart.objects.filter(session_key=session_key, checked_out=False)
-        logger.info(
-            f"Existing carts for session {session_key[:8] if session_key else 'None'}: {list(existing_carts.values_list('id', flat=True))}")
 
         try:
             cart, created = Cart.objects.get_or_create_for_request(
@@ -40,12 +40,7 @@ class CartViewSet(viewsets.ModelViewSet):
             )
 
             if created:
-                logger.info(f"Created new cart {cart.id} for {'user' if user else 'session'}")
-            else:
-                logger.info(f"Using existing cart {cart.id}")
-
-            logger.info(
-                f"Cart {cart.id} - Session: {cart.session_key[:8] if cart.session_key else 'None'}, Items: {cart.item_count}")
+                logger.info(f"Created cart {cart.id} for {'user' if user else 'session'}")
 
             return cart
 
@@ -53,120 +48,97 @@ class CartViewSet(viewsets.ModelViewSet):
             logger.error(f"Error getting/creating cart: {e}")
             raise
 
+    def _handle_cart_error(self, error_msg, exception=None):
+        """Centralized error handling"""
+        if exception:
+            logger.error(f"{error_msg}: {exception}")
+        else:
+            logger.error(error_msg)
+
+        return Response(
+            {'error': error_msg},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
     @action(detail=False, methods=['get'])
     def current(self, request):
-        """Get the current active cart details"""
+        """Get current active cart with validation info"""
         try:
             cart = self._get_or_create_cart()
 
-            # Get cart with item availability info
+            # Use select_related for better performance
+            cart_items = cart.items.select_related('content_type').all()
+
+            # Serialize cart data
             cart_data = self.get_serializer(cart).data
 
-            # Add availability info for each item
-            items_with_availability = []
-            for cart_item in cart.items.all():
-                item_data = CartItemSerializer(cart_item).data
-                item_data['is_available'] = cart_item.is_still_available()
-                item_data['has_sufficient_stock'] = cart_item.has_sufficient_stock()
-                item_data['price_changed'] = cart_item.has_price_changed()
-                if item_data['price_changed']:
-                    item_data['current_price'] = cart_item.get_current_price()
-                items_with_availability.append(item_data)
+            # Add validation info
+            validation_errors = cart.validate_for_checkout()
 
-            cart_data['items'] = items_with_availability
-
-            # Check if cart needs validation
-            checkout_validation = []
-            if cart.items.exists():
-                validation_errors = cart.validate_for_checkout()
-                if validation_errors:
-                    checkout_validation = validation_errors
-            else:
-                checkout_validation = ['Cart is empty']
-
-            response_data = {
+            return Response({
                 'cart': cart_data,
-                'checkout_validation': checkout_validation
-            }
-
-            logger.info(f"Returning cart {cart.id} with {cart.item_count} items")
-            return Response(response_data)
+                'validation_errors': validation_errors,
+                'is_valid_for_checkout': len(validation_errors) == 0
+            })
 
         except Exception as e:
-            logger.error(f"Error getting current cart: {e}")
-            return Response(
-                {'error': 'Failed to retrieve cart'},
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR
-            )
+            return self._handle_cart_error("Failed to retrieve cart", e)
 
     @transaction.atomic
     @action(detail=False, methods=['post'])
     def add_item(self, request):
-        """Add item to cart"""
+        """Add item to cart with proper validation"""
         try:
             cart = self._get_or_create_cart()
 
-            item_type = request.data.get('item_type')
-            item_id = request.data.get('item_id')
-            quantity = int(request.data.get('quantity', 1))
-            variant_id = request.data.get('variant_id')
-            variant_name = request.data.get('variant_name')
-            replace_quantity = request.data.get('replace_quantity', False)
-
-            logger.info(f"Adding item {item_id} (type: {item_type}) to cart {cart.id}, quantity: {quantity}")
-
-            # Validate variant requirements
-            if variant_id and not variant_name:
-                return Response(
-                    {'error': 'variant_name is required when variant_id is provided'},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
-
-            # Get the content type and item
-            try:
-                content_type = ContentType.objects.get(model=item_type.lower())
-                item = content_type.get_object_for_this_type(id=item_id)
-            except (ContentType.DoesNotExist, content_type.model_class().DoesNotExist):
-                return Response(
-                    {'error': f'Invalid {item_type} with id {item_id}'},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
-
-            # Add item to cart - only pass variant params if both are provided
-            if variant_id and variant_name:
-                cart_item = cart.add_item(
-                    item=item,
-                    quantity=quantity,
-                    replace_quantity=replace_quantity,
-                    variant_id=variant_id,
-                    variant_name=variant_name
-                )
-            else:
-                cart_item = cart.add_item(
-                    item=item,
-                    quantity=quantity,
-                    replace_quantity=replace_quantity
-                )
-
-            # IMPORTANT: Refresh cart from database to get updated data
-            cart.refresh_from_db()
-
-            logger.info(f"Successfully added item {item_id} to cart {cart.id}. Cart now has {cart.item_count} items")
-
-            response_data = {
-                'cart': self.get_serializer(cart).data,
-                'added_item': CartItemSerializer(cart_item).data,
-                'message': 'Item added to cart successfully'
+            # Extract and validate data
+            serializer_data = {
+                'item_type': request.data.get('item_type'),
+                'item_id': request.data.get('item_id'),
+                'quantity': request.data.get('quantity', 1),
+                'variant_id': request.data.get('variant_id'),
+                'variant_name': request.data.get('variant_name'),
+                'replace_quantity': request.data.get('replace_quantity', False)
             }
 
-            return Response(response_data)
+            # Validate required fields
+            if not serializer_data['item_type'] or not serializer_data['item_id']:
+                return self._handle_cart_error("item_type and item_id are required")
 
-        except Exception as e:
-            logger.error(f"Error adding item to cart: {e}")
-            return Response(
-                {'error': str(e)},
-                status=status.HTTP_400_BAD_REQUEST
+            try:
+                quantity = int(serializer_data['quantity'])
+                if quantity <= 0:
+                    return self._handle_cart_error("Quantity must be positive")
+            except (ValueError, TypeError):
+                return self._handle_cart_error("Invalid quantity")
+
+            # Get content type and item
+            try:
+                content_type = ContentType.objects.get(model=serializer_data['item_type'].lower())
+                item = content_type.get_object_for_this_type(id=serializer_data['item_id'])
+            except (ContentType.DoesNotExist, content_type.model_class().DoesNotExist):
+                return self._handle_cart_error(
+                    f"Invalid {serializer_data['item_type']} with id {serializer_data['item_id']}")
+
+            # Add item to cart
+            cart_item = cart.add_item(
+                item=item,
+                quantity=quantity,
+                replace_quantity=serializer_data['replace_quantity'],
+                variant_id=serializer_data['variant_id'],
+                variant_name=serializer_data['variant_name'] or ""
             )
+
+            return Response({
+                'cart': self.get_serializer(cart).data,
+                'added_item': CartItemSerializer(cart_item).data,
+                'message': 'Item added successfully'
+            })
+
+        except ValueError as e:
+            return self._handle_cart_error(str(e))
+        except Exception as e:
+            return self._handle_cart_error("Failed to add item", e)
 
     @transaction.atomic
     @action(detail=False, methods=['patch'])
@@ -176,34 +148,35 @@ class CartViewSet(viewsets.ModelViewSet):
             cart = self._get_or_create_cart()
 
             cart_item_id = request.data.get('cart_item_id')
-            quantity = int(request.data.get('quantity', 1))
-            variant_id = request.data.get('variant_id')
+            quantity = request.data.get('quantity')
 
-            cart_item = get_object_or_404(
-                CartItem,
-                id=cart_item_id,
-                cart=cart
-            )
+            if not cart_item_id:
+                return self._handle_cart_error("cart_item_id is required")
 
-            cart_item.quantity = quantity
-            if variant_id:
-                cart_item.variant_id = variant_id
-            cart_item.save()
+            try:
+                quantity = int(quantity)
+                if quantity < 0:
+                    return self._handle_cart_error("Quantity cannot be negative")
+            except (ValueError, TypeError):
+                return self._handle_cart_error("Invalid quantity")
 
-            # IMPORTANT: Refresh cart from database
-            cart.refresh_from_db()
+            # Use cart's update method instead of direct CartItem manipulation
+            if quantity == 0:
+                cart.remove_item_by_id(cart_item_id)
+                message = "Item removed successfully"
+            else:
+                cart.update_item_quantity(cart_item_id, quantity)
+                message = "Item updated successfully"
 
             return Response({
                 'cart': self.get_serializer(cart).data,
-                'message': 'Item updated successfully'
+                'message': message
             })
 
+        except ValueError as e:
+            return self._handle_cart_error(str(e))
         except Exception as e:
-            logger.error(f"Error updating cart item: {e}")
-            return Response(
-                {'error': str(e)},
-                status=status.HTTP_400_BAD_REQUEST
-            )
+            return self._handle_cart_error("Failed to update item", e)
 
     @transaction.atomic
     @action(detail=False, methods=['delete'])
@@ -211,19 +184,15 @@ class CartViewSet(viewsets.ModelViewSet):
         """Remove item from cart"""
         try:
             cart = self._get_or_create_cart()
-
             cart_item_id = request.data.get('cart_item_id')
 
-            cart_item = get_object_or_404(
-                CartItem,
-                id=cart_item_id,
-                cart=cart
-            )
+            if not cart_item_id:
+                return self._handle_cart_error("cart_item_id is required")
 
-            cart_item.delete()
+            success = cart.remove_item_by_id(cart_item_id)
 
-            # IMPORTANT: Refresh cart from database
-            cart.refresh_from_db()
+            if not success:
+                return self._handle_cart_error("Cart item not found")
 
             return Response({
                 'cart': self.get_serializer(cart).data,
@@ -231,31 +200,19 @@ class CartViewSet(viewsets.ModelViewSet):
             })
 
         except Exception as e:
-            logger.error(f"Error removing cart item: {e}")
-            return Response(
-                {'error': str(e)},
-                status=status.HTTP_400_BAD_REQUEST
-            )
+            return self._handle_cart_error("Failed to remove item", e)
 
     @transaction.atomic
     @action(detail=False, methods=['post'])
     def clear(self, request):
-        """Clear all items from cart"""
         try:
             cart = self._get_or_create_cart()
-            cart.items.all().delete()
-
-            # IMPORTANT: Refresh cart from database
-            cart.refresh_from_db()
+            deleted_count = cart.clear()
 
             return Response({
                 'cart': self.get_serializer(cart).data,
-                'message': 'Cart cleared successfully'
+                'message': f'Cart cleared - {deleted_count} items removed'
             })
 
         except Exception as e:
-            logger.error(f"Error clearing cart: {e}")
-            return Response(
-                {'error': str(e)},
-                status=status.HTTP_400_BAD_REQUEST
-            )
+            return self._handle_cart_error("Failed to clear cart", e)

@@ -36,7 +36,7 @@ export const useCart = () => {
     };
   }, []);
 
-  // Memoize actions to prevent unnecessary re-renders
+
   const fetchCart = useCallback(() => {
     if (!mounted.current) return;
     console.log('Fetching cart...');
@@ -142,13 +142,13 @@ export const useCart = () => {
   // Debug logging
   useEffect(() => {
     if (!mounted.current) return;
-    console.log('Cart Hook State:', {
-      cartExists: !!cart,
-      itemCount,
-      loading,
-      error,
-      cartItems: cart?.items?.length || 0
-    });
+    // console.log('Cart Hook State:', {
+    //   cartExists: !!cart,
+    //   itemCount,
+    //   loading,
+    //   error,
+    //   cartItems: cart?.items?.length || 0
+    // });
   }, [cart, itemCount, loading, error]);
 
   return {

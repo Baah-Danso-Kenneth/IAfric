@@ -59,7 +59,7 @@ export default function RootLayout({
       >
         <PageTransitionLoader/>
         <Providers>
-          <CartInitializer />
+          {/* <CartInitializer /> */}
           <div id='content'>
             {children}
           </div>

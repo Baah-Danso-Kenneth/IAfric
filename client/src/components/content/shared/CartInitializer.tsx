@@ -20,13 +20,13 @@ export default function CartInitializer() {
       try {
         // Only fetch if we don't have cart data or if it's empty
         if (!cart || cart.is_empty) {
-          console.log('Initializing cart...');
+          // console.log('Initializing cart...');
           await dispatch(getCurrentCart());
         } else {
-          console.log('Cart already initialized:', cart);
+          // console.log('Cart already initialized:', cart);
         }
       } catch (error) {
-        console.error('Failed to initialize cart:', error);
+        // console.error('Failed to initialize cart:', error);
       }
     };
 

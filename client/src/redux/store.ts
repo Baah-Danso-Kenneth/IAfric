@@ -14,7 +14,6 @@ export const store = configureStore({
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({
             serializableCheck: {
-                // Ignore these action types
                 ignoredActions: ['cart/getCurrentCart/fulfilled', 'cart/addItemToCart/fulfilled'],
                 // Ignore these field paths in all actions
                 ignoredActionPaths: ['payload.cart'],

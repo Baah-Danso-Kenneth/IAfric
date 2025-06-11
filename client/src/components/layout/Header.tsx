@@ -20,14 +20,14 @@ export function Header() {
     const dropdownContainerRef = useRef<HTMLDivElement>(null);
     const pathname = usePathname();
     
-    // Use the custom hook instead of direct Redux
+   
     const { cart, loading: cartLoading, error: cartError, itemCount: cartCount } = useCart();
     
     // Debug logging
     useEffect(() => {
         if (cart) {
-            console.log('Cart in Header:', cart);
-            console.log('Cart Count:', cartCount);
+            // console.log('Cart in Header:', cart);
+            // console.log('Cart Count:', cartCount);
         }
         if (cartError) {
             console.error('Cart loading error:', cartError);

@@ -214,7 +214,14 @@ LOGGING = {
             'level': 'INFO',
             'propagate': True,
         },
+
+        'apps.carts': {
+            'handlers': ['file','console'],
+            'level': 'INFO',
+        },
     },
+
+
 }
 
 # Lightning Payment Settings

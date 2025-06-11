@@ -17,10 +17,25 @@ function CartContent() {
     clearCartItems
   } = useCart();
   
- 
   const [updatingItems, setUpdatingItems] = useState<Set<number>>(new Set());
   const [removingItems, setRemovingItems] = useState<Set<number>>(new Set());
   const [isClearing, setIsClearing] = useState(false);
+
+ 
+
+  const getImageUrl = (imagePath: string) => {
+    if (!imagePath) return null;
+    
+    if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+      return imagePath;
+    }
+    
+    if (imagePath.startsWith('/')) {
+      return `${process.env.NEXT_PUBLIC_API_URL?.replace('/api/v1/', '')}${imagePath}`;
+    }
+    
+    return `${process.env.NEXT_PUBLIC_API_URL?.replace('/api/v1/', '')}/${imagePath}`;
+  };
 
   // Log cart state changes
   useEffect(() => {
@@ -86,15 +101,13 @@ function CartContent() {
     );
   }
 
-
-
   return (
     <div className='py-10 lg:py-20 bg-limeGreen bg-texture'>
       <div className='max-w-6xl mx-auto px-4 sm:px-6 lg:px-8'>
         
         {/* Page Header */}
-        <div className='mb-8 lg:mb-12 flex items-center justify-between'>
-          <h1 className='text-lg md:text-2xl lg:text-3xl uppercase text-electricPurple font-poppins'>
+        <div className='flex mb-8 lg:mb-12 flex-col lg:flex-row items-center justify-between'>
+          <h1 className='text-sm md:text-2xl mb-3 lg:mb-0 lg:text-3xl uppercase text-electricPurple font-poppins'>
             Shopping Cart {cart?.item_count ? `(${cart.item_count})` : ''}
           </h1>
           
@@ -107,7 +120,7 @@ function CartContent() {
             >
               {isClearing ? (
                 <>
-                  <Loader2 className='w-4 h-4 mr-2 animate-spin' />
+                  <Loader2 className='lg:w-4 lg:h-4 mr-2 animate-spin' />
                   Clearing...
                 </>
               ) : (
@@ -117,22 +130,6 @@ function CartContent() {
           )}
         </div>
 
-        {/* Empty Cart State */}
-        {cart.is_empty && (
-          <div className='text-center py-16 lg:py-24'>
-            <div className='w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6'>
-              <ShoppingBag className='w-12 h-12 text-gray-400' />
-            </div>
-            <h2 className='text-2xl lg:text-3xl font-semibold text-gray-900 mb-4'>Your cart is empty</h2>
-            <p className='text-gray-600 mb-8 max-w-md mx-auto'>
-              Looks like you haven't added any items to your cart yet. Start shopping to fill it up!
-            </p>
-            <Button className='bg-electricPurple hover:bg-electricPurple/90 text-white px-8 py-3'>
-              Start Shopping
-            </Button>
-          </div>
-        )}
-
         {/* Cart Items Container */}
         {!cart.is_empty && (
           <div className='bg-white rounded-lg shadow-sm overflow-hidden mb-6 lg:mb-8'>
@@ -141,25 +138,33 @@ function CartContent() {
             {cart.items.map((item: CartItem, index: number) => {
               const isItemUpdating = updatingItems.has(item.id);
               const isItemRemoving = removingItems.has(item.id);
-              console.log(item?.item_name)
-              console.log(item?.price)
-              console.log(item?.price_in_sats)
-
-
+             
+              const PLACEHOLDER_IMAGE = 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400&h=400&fit=crop&crop=center';
+              
+              
+              const rawImageUrl = item?.images?.[0]?.front_image;
+              const imageUrl = rawImageUrl ? getImageUrl(rawImageUrl) : PLACEHOLDER_IMAGE;
+              
+      
               
               return (
-                <div key={`${item.id}-${item.product?.id}`} className={`p-6 lg:p-8 ${index < cart.items.length - 1 ? 'border-b-2 border-gray-100' : ''} ${isItemRemoving ? 'opacity-50' : ''}`}>
+                <div key={`${item.id}-${item.item_details?.id}`} className={`p-6 lg:p-8 ${index < cart.items.length - 1 ? 'border-b-2 border-gray-100' : ''} ${isItemRemoving ? 'opacity-50' : ''}`}>
                   <div className='flex flex-col lg:flex-row gap-6 lg:gap-8'>
                     
                     <div className='flex flex-col lg:flex-row gap-4 lg:gap-6 flex-1'>
                       <div className='flex-shrink-0'>
                         <div className='relative w-20 h-20 sm:w-24 sm:h-24 lg:w-32 lg:h-32 rounded-lg overflow-hidden bg-gray-100'>
                           <Image 
-                            src={item.product?.images?.[0]?.front_image || "/images/hero-img.jpg"}
+                            src={imageUrl || PLACEHOLDER_IMAGE}
                             alt={item?.item_name || 'Product'} 
                             fill
                             className='object-cover hover:scale-105 transition-transform duration-300'
                             sizes="(max-width: 640px) 80px, (max-width: 1024px) 96px, 128px"
+                            onError={(e) => {
+                              console.error('Image failed to load:', imageUrl);
+                              // Fallback to placeholder if image fails
+                              (e.target as HTMLImageElement).src = PLACEHOLDER_IMAGE;
+                            }}
                           />
                         </div>
                       </div>
@@ -169,9 +174,9 @@ function CartContent() {
                         <h2 className='text-xl lg:text-2xl text-gray-900 capitalize font-medium'>
                           {item?.item_name || 'Unknown Product'}
                         </h2>
-                        {item.product?.description && (
-                          <p className='text-sm lg:text-base text-gray-600 leading-relaxed line-clamp-2'>
-                            {item.product.description}
+                        {item.item_details && (
+                          <p className='text-sm lg:text-base text-gray-600'>
+                            Type: {item.item_type} • ID: {item.item_details.id}
                           </p>
                         )}
                         <button 
@@ -220,10 +225,10 @@ function CartContent() {
                     <div className='flex lg:flex-col items-center lg:items-end justify-between lg:justify-center gap-4 lg:gap-3 min-w-[140px]'>
                       <div className='text-right'>
                         <div className='text-xl lg:text-2xl font-bold text-gray-900'>
-                          {((item.price || 0) * item.quantity).toLocaleString()} sats
+                          {((item.price_in_sats || 0) * item.quantity).toLocaleString()} sats
                         </div>
                         <div className='text-sm text-gray-500'>
-                          {(item.price || 0).toLocaleString()} sats each
+                          {(item.price_in_sats || 0).toLocaleString()} sats each
                         </div>
                       </div>
                       <button 

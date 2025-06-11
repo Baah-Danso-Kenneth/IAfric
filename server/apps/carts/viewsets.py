@@ -23,6 +23,7 @@ class CartViewSet(viewsets.ModelViewSet):
         cart = self._get_or_create_cart()
         return Cart.objects.filter(id=cart.id)
 
+
     def _get_or_create_cart(self):
         """Get or create cart - optimized version"""
         user = self.request.user if self.request.user.is_authenticated else None
@@ -33,6 +34,14 @@ class CartViewSet(viewsets.ModelViewSet):
 
         session_key = self.request.session.session_key
 
+        # ADD THIS DEBUG LOGGING
+        logger.info(f"🔍 _get_or_create_cart called:")
+        logger.info(f"  - request.user: {self.request.user}")
+        logger.info(
+            f"  - user.is_authenticated: {self.request.user.is_authenticated if hasattr(self.request.user, 'is_authenticated') else 'N/A'}")
+        logger.info(f"  - user (final): {user}")
+        logger.info(f"  - session_key: {session_key}")
+
         try:
             cart, created = Cart.objects.get_or_create_for_request(
                 user=user,
@@ -40,12 +49,14 @@ class CartViewSet(viewsets.ModelViewSet):
             )
 
             if created:
-                logger.info(f"Created cart {cart.id} for {'user' if user else 'session'}")
+                logger.info(f"✅ Created NEW cart {cart.id} for {'user' if user else 'session'}")
+            else:
+                logger.info(f"♻️ REUSED existing cart {cart.id} for {'user' if user else 'session'}")
 
             return cart
 
         except Exception as e:
-            logger.error(f"Error getting/creating cart: {e}")
+            logger.error(f"❌ Error getting/creating cart: {e}")
             raise
 
     def _handle_cart_error(self, error_msg, exception=None):
@@ -96,7 +107,6 @@ class CartViewSet(viewsets.ModelViewSet):
                 'item_type': request.data.get('item_type'),
                 'item_id': request.data.get('item_id'),
                 'quantity': request.data.get('quantity', 1),
-                'variant_id': request.data.get('variant_id'),
                 'variant_name': request.data.get('variant_name'),
                 'replace_quantity': request.data.get('replace_quantity', False)
             }
@@ -124,9 +134,7 @@ class CartViewSet(viewsets.ModelViewSet):
             cart_item = cart.add_item(
                 item=item,
                 quantity=quantity,
-                replace_quantity=serializer_data['replace_quantity'],
-                variant_id=serializer_data['variant_id'],
-                variant_name=serializer_data['variant_name'] or ""
+                replace_quantity=serializer_data['replace_quantity']
             )
 
             return Response({

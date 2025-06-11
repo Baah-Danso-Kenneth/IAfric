@@ -6,7 +6,6 @@ export const fetchWithConfig = async (url: string, options: RequestInit = {}) =>
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
-      ...options.headers,
     },
     ...options,
   });

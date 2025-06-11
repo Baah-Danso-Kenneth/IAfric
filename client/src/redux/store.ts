@@ -14,11 +14,28 @@ export const store = configureStore({
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({
             serializableCheck: {
-                ignoredActions: ['cart/getCurrentCart/fulfilled', 'cart/addItemToCart/fulfilled'],
-                // Ignore these field paths in all actions
-                ignoredActionPaths: ['payload.cart'],
-                // Ignore these paths in the state
-                ignoredPaths: ['cart.cart'],
+                ignoredActions: [
+                    // Add these RTK Query action patterns
+                    'listApi/executeQuery/pending',
+                    'listApi/executeQuery/fulfilled', 
+                    'listApi/executeQuery/rejected',
+                    
+                    // And your existing ones
+                    'cart/getCurrentCart/fulfilled',
+                    'cart/addItemToCart/fulfilled'
+                    ],
+              
+                ignoredActionPaths: ['meta.baseQueryMeta','payload.cart'],
+                
+                ignoredPaths: [
+                    'cart.cart',
+                    'api.queries',
+
+                    'listProductsApi.queries',
+                    'allExperienceApi.queries', 
+                    'paymentsApi.queries'
+
+                ],
             },
         }).concat(
             allExperienceApi.middleware,

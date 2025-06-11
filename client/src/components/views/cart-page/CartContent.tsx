@@ -17,7 +17,7 @@ function CartContent() {
     clearCartItems
   } = useCart();
   
-  // Track which items are being updated individually
+ 
   const [updatingItems, setUpdatingItems] = useState<Set<number>>(new Set());
   const [removingItems, setRemovingItems] = useState<Set<number>>(new Set());
   const [isClearing, setIsClearing] = useState(false);
@@ -86,7 +86,7 @@ function CartContent() {
     );
   }
 
-  console.log('Cart data:', cart); // Add this for debugging
+
 
   return (
     <div className='py-10 lg:py-20 bg-limeGreen bg-texture'>
@@ -141,6 +141,11 @@ function CartContent() {
             {cart.items.map((item: CartItem, index: number) => {
               const isItemUpdating = updatingItems.has(item.id);
               const isItemRemoving = removingItems.has(item.id);
+              console.log(item?.item_name)
+              console.log(item?.price)
+              console.log(item?.price_in_sats)
+
+
               
               return (
                 <div key={`${item.id}-${item.product?.id}`} className={`p-6 lg:p-8 ${index < cart.items.length - 1 ? 'border-b-2 border-gray-100' : ''} ${isItemRemoving ? 'opacity-50' : ''}`}>
@@ -151,7 +156,7 @@ function CartContent() {
                         <div className='relative w-20 h-20 sm:w-24 sm:h-24 lg:w-32 lg:h-32 rounded-lg overflow-hidden bg-gray-100'>
                           <Image 
                             src={item.product?.images?.[0]?.front_image || "/images/hero-img.jpg"}
-                            alt={item.product?.name || 'Product'} 
+                            alt={item?.item_name || 'Product'} 
                             fill
                             className='object-cover hover:scale-105 transition-transform duration-300'
                             sizes="(max-width: 640px) 80px, (max-width: 1024px) 96px, 128px"
@@ -162,7 +167,7 @@ function CartContent() {
                       {/* Product Details */}
                       <div className='flex-1 space-y-2 lg:space-y-3'>
                         <h2 className='text-xl lg:text-2xl text-gray-900 capitalize font-medium'>
-                          {item.product?.name || 'Unknown Product'}
+                          {item?.item_name || 'Unknown Product'}
                         </h2>
                         {item.product?.description && (
                           <p className='text-sm lg:text-base text-gray-600 leading-relaxed line-clamp-2'>

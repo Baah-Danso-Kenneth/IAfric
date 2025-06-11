@@ -1,4 +1,3 @@
-# Improved views.py
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -23,9 +22,8 @@ class CartViewSet(viewsets.ModelViewSet):
         cart = self._get_or_create_cart()
         return Cart.objects.filter(id=cart.id)
 
-
     def _get_or_create_cart(self):
-        """Get or create cart - optimized version"""
+        """Get or create cart - optimized version with prefetch"""
         user = self.request.user if self.request.user.is_authenticated else None
 
         # Ensure session exists
@@ -34,7 +32,7 @@ class CartViewSet(viewsets.ModelViewSet):
 
         session_key = self.request.session.session_key
 
-        # ADD THIS DEBUG LOGGING
+        # Debug logging
         logger.info(f"🔍 _get_or_create_cart called:")
         logger.info(f"  - request.user: {self.request.user}")
         logger.info(
@@ -59,6 +57,18 @@ class CartViewSet(viewsets.ModelViewSet):
             logger.error(f"❌ Error getting/creating cart: {e}")
             raise
 
+    def _get_optimized_cart(self, cart_id):
+        """Get cart with optimized prefetching for GenericForeignKey"""
+        # ✅ FIXED: Proper prefetching for GenericForeignKey
+        return Cart.objects.select_related().prefetch_related(
+            'items',  # Prefetch cart items
+            'items__content_type',  # Prefetch content types
+            # ❌ REMOVED: These don't work with GenericForeignKey
+            # 'items__content_object',
+            # 'items__content_object__images',
+            # 'items__content_object__productimage_set',
+        ).get(id=cart_id)
+
     def _handle_cart_error(self, error_msg, exception=None):
         """Centralized error handling"""
         if exception:
@@ -73,14 +83,34 @@ class CartViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['get'])
     def current(self, request):
-        """Get current active cart with validation info"""
+        """Get current active cart with validation info and optimized image loading"""
         try:
             cart = self._get_or_create_cart()
 
-            # Use select_related for better performance
-            cart_items = cart.items.select_related('content_type').all()
+            # Use the optimized cart fetching
+            cart = self._get_optimized_cart(cart.id)
 
-            # Serialize cart data
+            # 🔥 DEBUG: Log the cart items and their related objects
+            logger.info(f"🛒 Cart {cart.id} has {cart.items.count()} items:")
+            for item in cart.items.all():
+                logger.info(f"  📦 Item {item.id}: {item.item}")
+                logger.info(f"      Content type: {item.content_type.model}")
+
+                # Check if item exists and has images
+                if item.item:
+                    logger.info(f"      Item object: {type(item.item)}")
+                    if hasattr(item.item, 'images'):
+                        images_count = item.item.images.count()
+                        logger.info(f"      📸 Images count: {images_count}")
+                        for img in item.item.images.all():
+                            logger.info(f"        - Image {img.id}: front={img.front_image}, back={img.back_image}")
+                    else:
+                        logger.info(f"      ❌ No 'images' attribute on {type(item.item)}")
+                        # Check what attributes it does have
+                        logger.info(
+                            f"      Available attributes: {[attr for attr in dir(item.item) if not attr.startswith('_')]}")
+
+            # Serialize cart data (images will be included via CartItemSerializer)
             cart_data = self.get_serializer(cart).data
 
             # Add validation info
@@ -137,8 +167,11 @@ class CartViewSet(viewsets.ModelViewSet):
                 replace_quantity=serializer_data['replace_quantity']
             )
 
+            # Return updated cart with prefetched data
+            updated_cart = self._get_optimized_cart(cart.id)
+
             return Response({
-                'cart': self.get_serializer(cart).data,
+                'cart': self.get_serializer(updated_cart).data,
                 'added_item': CartItemSerializer(cart_item).data,
                 'message': 'Item added successfully'
             })
@@ -176,8 +209,11 @@ class CartViewSet(viewsets.ModelViewSet):
                 cart.update_item_quantity(cart_item_id, quantity)
                 message = "Item updated successfully"
 
+            # Return updated cart with prefetched data
+            updated_cart = self._get_optimized_cart(cart.id)
+
             return Response({
-                'cart': self.get_serializer(cart).data,
+                'cart': self.get_serializer(updated_cart).data,
                 'message': message
             })
 
@@ -202,8 +238,11 @@ class CartViewSet(viewsets.ModelViewSet):
             if not success:
                 return self._handle_cart_error("Cart item not found")
 
+            # Return updated cart with prefetched data
+            updated_cart = self._get_optimized_cart(cart.id)
+
             return Response({
-                'cart': self.get_serializer(cart).data,
+                'cart': self.get_serializer(updated_cart).data,
                 'message': 'Item removed successfully'
             })
 
@@ -213,10 +252,12 @@ class CartViewSet(viewsets.ModelViewSet):
     @transaction.atomic
     @action(detail=False, methods=['post'])
     def clear(self, request):
+        """Clear all items from cart"""
         try:
             cart = self._get_or_create_cart()
             deleted_count = cart.clear()
 
+            # No need for prefetch here since cart is empty
             return Response({
                 'cart': self.get_serializer(cart).data,
                 'message': f'Cart cleared - {deleted_count} items removed'
@@ -224,3 +265,64 @@ class CartViewSet(viewsets.ModelViewSet):
 
         except Exception as e:
             return self._handle_cart_error("Failed to clear cart", e)
+
+    # Add this to your CartViewSet
+    @action(detail=False, methods=['get'])
+    def debug(self, request):
+        """Debug endpoint to understand cart item structure"""
+        try:
+            cart = self._get_or_create_cart()
+            cart = self._get_optimized_cart(cart.id)
+
+            debug_info = {
+                'cart_id': cart.id,
+                'items_count': cart.items.count(),
+                'items_debug': []
+            }
+
+            for item in cart.items.all():
+                item_debug = {
+                    'cart_item_id': item.id,
+                    'item_name': str(item.item),
+                    'content_type': item.content_type.model,
+                    'item_id': item.item.id if item.item else None,
+                    'item_type': type(item.item).__name__ if item.item else None,
+                    'has_images_attr': hasattr(item.item, 'images') if item.item else False,
+                    'has_image_attr': hasattr(item.item, 'image') if item.item else False,
+                    'has_photo_attr': hasattr(item.item, 'photo') if item.item else False,
+                }
+
+                # If item exists, get more details
+                if item.item:
+                    # Get all non-private attributes
+                    item_debug['item_attributes'] = [attr for attr in dir(item.item) if not attr.startswith('_')]
+
+                    # If it's a product, get more details
+                    if item.content_type.model == 'product':
+                        if hasattr(item.item, 'images'):
+                            images = item.item.images.all()
+                            item_debug['images_count'] = images.count()
+                            item_debug['images_details'] = []
+
+                            for img in images:
+                                item_debug['images_details'].append({
+                                    'id': img.id,
+                                    'front_image': str(img.front_image) if img.front_image else None,
+                                    'back_image': str(img.back_image) if img.back_image else None,
+                                    'front_image_url': img.front_image.url if img.front_image else None,
+                                    'back_image_url': img.back_image.url if img.back_image else None,
+                                })
+                        else:
+                            item_debug['images_count'] = 0
+                            item_debug['reason'] = 'No images attribute found'
+
+                debug_info['items_debug'].append(item_debug)
+
+            return Response(debug_info)
+
+        except Exception as e:
+            logger.error(f"Debug endpoint error: {e}")
+            return Response({
+                'error': str(e),
+                'type': type(e).__name__
+            }, status=500)

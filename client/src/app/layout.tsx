@@ -3,6 +3,7 @@ import localFont from 'next/font/local'
 import "./globals.css";
 import PageTransitionLoader from "@/components/content/common/PageTransitionLoader";
 import { Providers } from "./Provider";
+import CartInitializer from "@/components/content/shared/CartInitializer";
 
 
 const bowlby = localFont({
@@ -44,29 +45,25 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>)
-{
-
+}: {
+  children: React.ReactNode
+}) {
   return (
     <html lang="en">
-<body
-  className={`${poppins.variable} ${delight_mother.variable} ${outfit.variable} 
-  ${bowlby.variable} 
-  ${dmMono.variable} 
-  ${play_flaire.variable}
-  font-outfit antialiased text-softCharcoal  overflow-x-hidden`}
->
-  <PageTransitionLoader/>
-  <Providers>
-  <div id='content'>
-    {children}
-  </div>
-  </Providers>
-
-</body>
-
+      <body
+        className={`${poppins.variable} ${delight_mother.variable} ${outfit.variable} 
+        ${bowlby.variable} 
+        ${dmMono.variable} 
+        ${play_flaire.variable}
+        font-outfit antialiased text-softCharcoal  overflow-x-hidden`}
+      >
+        <PageTransitionLoader/>
+        <Providers>
+          <div id='content'>
+            {children}
+          </div>
+        </Providers>
+      </body>
     </html>
-  );
+  )
 }

@@ -60,7 +60,7 @@ class Cart(models.Model):
             raise ValidationError("Cart must have either a user or session_key")
 
     @transaction.atomic
-    def add_item(self, item, quantity=1, replace_quantity=False, variant_id=None, variant_name=""):
+    def add_item(self, item, quantity=1, replace_quantity=False):
         """
         Add an item to the cart with proper concurrency handling
         """
@@ -81,7 +81,6 @@ class Cart(models.Model):
             cart=self,
             content_type=content_type,
             object_id=item.id,
-            variant_id=variant_id
         ).first()
 
         if existing_item:
@@ -97,31 +96,27 @@ class Cart(models.Model):
                 content_type=content_type,
                 object_id=item.id,
                 quantity=quantity,
-                price_in_sats=self._get_item_price(item),
-                variant_id=variant_id,
-                variant_name=variant_name
+                price_in_sats=self._get_item_price(item)
             )
-
-        # FIXED: Always update cart timestamp when items change
+            
         self.save(update_fields=['updated'])
 
         logger.info(f"Added item {item.id} to cart {self.id}, quantity: {quantity}")
         return cart_item
 
     @transaction.atomic
-    def update_item_quantity(self, item_id, quantity, variant_id=None):
+    def update_item_quantity(self, item_id, quantity):
         """Update the quantity of an item in the cart"""
         if quantity < 0:
             raise ValueError("Quantity cannot be negative")
 
         if quantity == 0:
-            return self.remove_item_by_id(item_id, variant_id)
+            return self.remove_item_by_id(item_id)
 
         try:
             cart_item = CartItem.objects.select_for_update().get(
                 cart=self,
                 id=item_id,
-                variant_id=variant_id
             )
 
             # Check stock if applicable
@@ -139,13 +134,12 @@ class Cart(models.Model):
             raise ValueError("Cart item not found")
 
     @transaction.atomic
-    def remove_item_by_id(self, item_id, variant_id=None):
+    def remove_item_by_id(self, item_id):
         """Remove an item from the cart by CartItem ID"""
         try:
             cart_item = CartItem.objects.get(
                 cart=self,
-                id=item_id,
-                variant_id=variant_id
+                id=item_id
             )
             cart_item.delete()
 
@@ -182,7 +176,6 @@ class Cart(models.Model):
 
     @property
     def unique_item_count(self):
-        """Get the number of unique items in the cart"""
         return self.items.count()
 
     @property
@@ -267,19 +260,15 @@ class CartItem(models.Model):
     )
     date_added = models.DateTimeField(auto_now_add=True)
 
-    # For handling product variants
-    variant_id = models.PositiveIntegerField(null=True, blank=True)
-    variant_name = models.CharField(max_length=255, blank=True)
-
     class Meta:
         ordering = ['-date_added']
         indexes = [
             models.Index(fields=['cart', 'content_type', 'object_id']),
-            models.Index(fields=['cart', 'variant_id']),
+            models.Index(fields=['cart']),
         ]
         constraints = [
             models.UniqueConstraint(
-                fields=['cart', 'content_type', 'object_id', 'variant_id'],
+                fields=['cart', 'content_type', 'object_id'],
                 name='unique_cart_item_variant'
             )
         ]

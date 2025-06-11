@@ -1,6 +1,6 @@
-import { ProductProps } from "./product.ds";
+import { ProductImageProps, ProductProps } from "./product.ds";
 
-export interface CartItemData {
+export interface CartItemDetails {
   id: number;
   name: string;
   type: string;
@@ -8,16 +8,23 @@ export interface CartItemData {
 
 export interface CartItem {
   id: number;
-  item: CartItemData | null;
   item_name: string;
+  item_type: string;
+  item_details: CartItemDetails | null;
   price_in_sats: number;
-  price: number; 
   quantity: number;
   total_price: number;
-  product: ProductProps | null; 
+  current_price: number;
+  price_changed: boolean;
+  is_available: boolean;
+  has_sufficient_stock: boolean;
+  images: ProductImageProps[]; // ✅ Images are directly on CartItem
+  date_added: string;
+  
+  // Legacy/deprecated fields for backward compatibility
+  product?: ProductProps | null; 
   variant_id?: number;
   variant_name?: string;
-  date_added: string;
 }
 
 export interface Cart {
@@ -27,7 +34,7 @@ export interface Cart {
   updated: string;
   checked_out: boolean;
   checkout_date?: string;
-  is_saved_for_later: boolean;
+  is_saved_for_later?: boolean;
   session_key?: string;
   items: CartItem[];
   total_sats: number;
@@ -36,10 +43,11 @@ export interface Cart {
   is_empty: boolean;
 }
 
-// NEW: Backend response wrapper types
+// Backend response wrapper types
 export interface CartResponse {
   cart: Cart;
-  checkout_validation?: string[];
+  validation_errors?: string[];
+  is_valid_for_checkout?: boolean;
 }
 
 export interface AddItemResponse {
@@ -68,7 +76,6 @@ export interface AddItemRequest {
   item_type: string;
   item_id: number;
   quantity: number;
-  variant_id?: number;
   variant_name?: string;
   replace_quantity?: boolean;
 }
@@ -76,10 +83,8 @@ export interface AddItemRequest {
 export interface UpdateItemRequest {
   cart_item_id: number;
   quantity: number;
-  variant_id?: number;
 }
 
 export interface RemoveItemRequest {
   cart_item_id: number;
-  variant_id?: number;
 }

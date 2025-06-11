@@ -16,7 +16,7 @@ interface CartState {
   cart: Cart | null;
   loading: boolean;
   error: string | null;
-  lastUpdated: number | null; // Add timestamp to track updates
+  lastUpdated: number | null; 
 }
 
 const initialState: CartState = {
@@ -26,7 +26,7 @@ const initialState: CartState = {
   lastUpdated: null,
 };
 
-// Helper function to handle async thunk errors
+
 const handleAsyncError = (error: any): string => {
   if (error instanceof Error) {
     return error.message;
@@ -37,7 +37,7 @@ const handleAsyncError = (error: any): string => {
   return 'An unexpected error occurred';
 };
 
-// Async thunks with better error handling
+
 export const getCurrentCart = createAsyncThunk<CartResponse, void>(
   'cart/getCurrentCart',
   async (_, { rejectWithValue }) => {
@@ -75,7 +75,7 @@ export const updateCartItem = createAsyncThunk<UpdateItemResponse, UpdateItemReq
   'cart/updateCartItem',
   async (data, { rejectWithValue }) => {
     try {
-      console.log('Updating cart item via API:', data);
+      // console.log('Updating cart item via API:', data);
       const response = await fetchWithConfig('cart/update_item/', {
         method: 'PATCH',
         body: JSON.stringify(data),
@@ -98,7 +98,7 @@ export const removeCartItem = createAsyncThunk<RemoveItemResponse, RemoveItemReq
         method: 'DELETE',
         body: JSON.stringify(data),
       });
-      console.log('Remove item API response:', response);
+      // console.log('Remove item API response:', response);
       return response;
     } catch (error) {
       console.error('Failed to remove item:', error);
@@ -132,9 +132,13 @@ export const cartSlice = createSlice({
       state.error = null;
     },
     resetCart: (state) => {
-      return { ...initialState };
+      state.cart = null;
+      state.loading=false;
+      state.error = null;
+      state.lastUpdated = null;
     },
-    // Add a reducer to manually update cart if needed
+   
+
     setCart: (state, action: PayloadAction<Cart | null>) => {
       state.cart = action.payload;
       state.lastUpdated = Date.now();
@@ -142,14 +146,14 @@ export const cartSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Get current cart
+     
       .addCase(getCurrentCart.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
       .addCase(getCurrentCart.fulfilled, (state, action) => {
         state.loading = false;
-        // Ensure we're getting the cart from the response structure
+        
         state.cart = action.payload.cart || action.payload;
         state.error = null;
         state.lastUpdated = Date.now();
@@ -161,7 +165,6 @@ export const cartSlice = createSlice({
         console.error('Failed to fetch cart:', action.payload);
       })
 
-      // Add item to cart
       .addCase(addItemToCart.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -180,7 +183,7 @@ export const cartSlice = createSlice({
         console.error('Failed to add item:', action.payload);
       })
 
-      // Update cart item
+
       .addCase(updateCartItem.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -239,20 +242,12 @@ export const cartSlice = createSlice({
 export const { clearError, resetCart, setCart } = cartSlice.actions;
 export default cartSlice.reducer;
 
-// Enhanced selectors with better error handling
+
 export const selectCart = (state: { cart: CartState }) => state.cart.cart;
 export const selectCartLoading = (state: { cart: CartState }) => state.cart.loading;
 export const selectCartError = (state: { cart: CartState }) => state.cart.error;
 export const selectCartLastUpdated = (state: { cart: CartState }) => state.cart.lastUpdated;
 
 export const selectCartItemCount = (state: { cart: CartState }) => {
-  const items = state.cart.cart?.items;
-  if (!items || !Array.isArray(items)) {
-    return 0;
-  }
-  return items.reduce((total, item) => {
-    const quantity = typeof item.quantity === 'number' ? item.quantity : 0;
-    return total + quantity;
-  }, 0);
+  return state.cart.cart?.item_count || 0;
 };
-
